@@ -26,10 +26,11 @@ const nextConfig: NextConfig = {
             value: "on",
           },
           // --- NEW SECURITY HEADERS ---
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
+          // X-Frame-Options dihapus agar Preview Panel bisa menampilkan website via iframe
+          // {
+          //   key: "X-Frame-Options",
+          //   value: "SAMEORIGIN",
+          // },
           {
             key: "Strict-Transport-Security",
             value: "max-age=31536000; includeSubDomains; preload",
@@ -57,7 +58,7 @@ const nextConfig: NextConfig = {
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
-              "frame-ancestors 'self'",
+              "frame-ancestors *",
             ].join('; '),
           },
         ],
