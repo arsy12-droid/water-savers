@@ -56,15 +56,17 @@ export interface GroqNonStreamResponse {
   };
 }
 
-// ── Models ─────────────────────────────────────────────────────────────
+// ── Models (Smart 3-Model Routing) ────────────────────────────────────────
+// Each model has its own rate limit quota. By routing intelligently,
+// we get ~3x the daily capacity compared to using a single model.
 
 export const GROQ_MODELS = {
-  /** Best quality chat model — recommended for AquAI */
+  /** ⚡ Fast & cheap — for simple chat queries (~70% of traffic) */
+  chatFast: 'openai/gpt-oss-20b',
+  /** 💬 Best quality + web search — for complex queries & search (~25% of traffic) */
   chat: 'llama-3.3-70b-versatile',
-  /** Fast chat for simple queries */
-  chatFast: 'llama-3.1-8b-instant',
-  /** Vision model — supports image understanding */
-  vision: 'llama-3.2-90b-vision-preview',
+  /** 🧠 Vision + chat + web search — for image analysis (~5% of traffic) */
+  vision: 'meta-llama/llama-4-scout-17b-16e-instruct',
 } as const;
 
 // ── Core API Call ──────────────────────────────────────────────────────

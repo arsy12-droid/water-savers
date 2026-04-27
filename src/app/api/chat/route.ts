@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { groqChat, groqWebSearch, type GroqMessage } from '@/lib/groq';
+import { groqChat, groqWebSearch, GROQ_MODELS, type GroqMessage } from '@/lib/groq';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 import { securityGuard, getClientIp } from '@/lib/security';
 import { randomBytes } from 'node:crypto';
@@ -383,9 +383,12 @@ export async function POST(request: NextRequest) {
             let fullContent = '';
 
             try {
+              // Smart routing: use fast model for simple chat, quality model for search
+              const chatModel = searched ? GROQ_MODELS.chat : GROQ_MODELS.chatFast;
+
               const groqResponse = await groqChat(
                 history as GroqMessage[],
-                { temperature: 0.4, stream: true }
+                { model: chatModel, temperature: 0.4, stream: true }
               );
 
               sdkStream = groqResponse.body as ReadableStream<Uint8Array>;
@@ -474,7 +477,11 @@ export async function POST(request: NextRequest) {
       }
 
       // ── Non-streaming path ────────────────────────────────────────
+      // Smart routing: use fast model for simple chat, quality model for search
+      const chatModel = searched ? GROQ_MODELS.chat : GROQ_MODELS.chatFast;
+
       const groqResponse = await groqChat(history as GroqMessage[], {
+        model: chatModel,
         temperature: 0.4,
       });
 
