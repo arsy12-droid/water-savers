@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Droplet, DropletOff, ArrowRight, AlertTriangle } from 'lucide-react';
+import { ChevronDown, Droplet, DropletOff, ArrowRight, AlertTriangle, Droplets } from 'lucide-react';
 import { useLanguage } from '@/hooks/use-language';
 import {
   Dialog,
@@ -21,21 +21,31 @@ const PARTICLE_COLORS = [
   'rgba(147,197,253,0.5)',
 ];
 
-// Deterministic pseudo-random from index (no Math.random — avoids hydration mismatch)
 function seeded(i: number) {
   const x = Math.sin(i * 127.1 + 311.7) * 43758.5453;
   return x - Math.floor(x);
 }
 
-// Reduced from 20 to 12 particles for better performance while keeping visual richness
-const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
+// Reduced particle count for smoother performance
+const PARTICLES = Array.from({ length: 10 }, (_, i) => ({
   id: i,
   left: `${(seeded(i) * 100).toFixed(2)}%`,
-  top: `${(30 + seeded(i + 50) * 50).toFixed(2)}%`,
-  size: `${(4 + seeded(i + 100) * 10).toFixed(2)}px`,
+  top: `${(20 + seeded(i + 50) * 60).toFixed(2)}%`,
+  size: `${(3 + seeded(i + 100) * 10).toFixed(2)}px`,
   color: PARTICLE_COLORS[i % PARTICLE_COLORS.length],
-  delay: `${(seeded(i + 150) * 5).toFixed(2)}s`,
-  duration: `${(5 + seeded(i + 200) * 7).toFixed(2)}s`,
+  delay: `${(seeded(i + 150) * 6).toFixed(2)}s`,
+  duration: `${(6 + seeded(i + 200) * 8).toFixed(2)}s`,
+}));
+
+// Reduced bubble count
+const BUBBLES = Array.from({ length: 4 }, (_, i) => ({
+  id: i,
+  left: `${(seeded(i + 300) * 100).toFixed(1)}%`,
+  bottom: `${(seeded(i + 400) * 25).toFixed(1)}%`,
+  size: `${(10 + seeded(i + 500) * 20).toFixed(0)}px`,
+  delay: `${(seeded(i + 600) * 4).toFixed(1)}s`,
+  duration: `${(7 + seeded(i + 700) * 5).toFixed(1)}s`,
+  opacity: `${(0.03 + seeded(i + 800) * 0.06).toFixed(3)}`,
 }));
 
 export default function Hero() {
@@ -43,8 +53,8 @@ export default function Hero() {
   const [showCausePopup, setShowCausePopup] = useState(false);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden wg">
-      {/* Floating particles */}
+    <section className="relative min-h-screen flex items-center justify-center hero-mesh">
+      {/* Floating particles — reduced for smoother scroll */}
       {PARTICLES.map((p) => (
         <div
           key={p.id}
@@ -66,59 +76,88 @@ export default function Hero() {
         />
       ))}
 
-      {/* Floating orbs */}
-      <div className="fl absolute top-1/4 left-[10%] w-64 h-64 rounded-full bg-cyan-400/10 blur-3xl pointer-events-none" aria-hidden="true" />
-      <div className="fld absolute bottom-1/4 right-[10%] w-48 h-48 rounded-full bg-blue-400/15 blur-3xl pointer-events-none" aria-hidden="true" />
-      <div className="fl2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-ocean-400/5 blur-3xl pointer-events-none" aria-hidden="true" />
+      {/* Floating glass bubbles — reduced */}
+      {BUBBLES.map((b) => (
+        <div
+          key={`bubble-${b.id}`}
+          className="pointer-events-none absolute rounded-full"
+          aria-hidden="true"
+          style={{
+            left: b.left,
+            bottom: b.bottom,
+            width: b.size,
+            height: b.size,
+            opacity: b.opacity,
+            border: '1px solid rgba(255,255,255,0.12)',
+            background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent)',
+            animationName: 'floatSway',
+            animationDuration: b.duration,
+            animationTimingFunction: 'ease-in-out',
+            animationDelay: b.delay,
+            animationIterationCount: 'infinite',
+          }}
+        />
+      ))}
 
-      {/* Ripple circles */}
+      {/* Floating orbs — layered depth (static, no animation to reduce jitter) */}
+      <div className="absolute top-[20%] left-[8%] w-72 h-72 rounded-full bg-cyan-400/10 blur-3xl pointer-events-none" aria-hidden="true" />
+      <div className="absolute bottom-[20%] right-[8%] w-56 h-56 rounded-full bg-blue-400/15 blur-3xl pointer-events-none" aria-hidden="true" />
+      <div className="absolute top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-ocean-400/5 blur-3xl pointer-events-none" aria-hidden="true" />
+
+      {/* Ripple circles — subtle */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">
-        <div className="rp absolute w-32 h-32 -ml-16 -mt-16 rounded-full border border-cyan-300/20" />
-        <div className="rpd absolute w-32 h-32 -ml-16 -mt-16 rounded-full border border-cyan-300/20" />
-        <div className="rp2 absolute w-32 h-32 -ml-16 -mt-16 rounded-full border border-cyan-300/20" />
+        <div className="rp absolute w-40 h-40 -ml-20 -mt-20 rounded-full border border-cyan-300/15" />
+        <div className="rpd absolute w-40 h-40 -ml-20 -mt-20 rounded-full border border-cyan-300/15" />
       </div>
 
-      {/* Water drops */}
+      {/* Water drops — subtle */}
       <div className="absolute top-[15%] left-[20%] pointer-events-none" aria-hidden="true">
-        <div className="dr w-3 h-4 rounded-full bg-cyan-300/60" />
+        <div className="dr w-3 h-4 rounded-full bg-cyan-300/60" style={{ animationName: 'dropFall', animationDuration: '2.2s', animationTimingFunction: 'ease-in', animationIterationCount: 'infinite' }} />
       </div>
-      <div className="absolute top-[25%] right-[25%] pointer-events-none" aria-hidden="true">
-        <div className="dr1 w-2 h-3 rounded-full bg-blue-300/50" />
-      </div>
-      <div className="absolute top-[35%] left-[60%] pointer-events-none" aria-hidden="true">
-        <div className="dr2 w-2.5 h-3.5 rounded-full bg-sky-300/40" />
+      <div className="absolute top-[30%] right-[25%] pointer-events-none" aria-hidden="true">
+        <div className="dr1 w-2 h-3 rounded-full bg-blue-300/50" style={{ animationName: 'dropFall', animationDuration: '2.2s', animationTimingFunction: 'ease-in', animationDelay: '0.75s', animationIterationCount: 'infinite' }} />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-32 pb-40">
-        <div className="af inline-flex items-center gap-2 glass rounded-full px-5 py-2.5 mb-8">
-          <Droplet className="w-4 h-4 text-cyan-300" />
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-24 pb-36">
+        {/* Badge with pulsing dot */}
+        <div className="af inline-flex items-center gap-2.5 glass rounded-full px-5 py-2.5 mb-8">
+          <div className="relative">
+            <Droplet className="w-4 h-4 text-cyan-300" />
+            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+          </div>
           <span className="text-blue-100 text-sm font-medium">{t('hero_badge')}</span>
         </div>
 
+        {/* Title with gradient */}
         <h1 className="af d1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
           {t('hero_title_before')}
           <br />
           <span className="tg">{t('hero_title_accent')}</span>
         </h1>
 
+        {/* Description */}
         <p className="af d2 text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
           {t('hero_desc')}
         </p>
 
+        {/* CTA buttons */}
         <div className="af d3 flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href="#langkah"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-700 font-bold rounded-full hover:shadow-2xl hover:shadow-white/25 transition-all duration-300 hover:scale-105"
+            className="group relative inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-700 font-bold rounded-full shadow-lg shadow-white/10 hover:shadow-2xl hover:shadow-white/20 transition-all duration-500 hover:scale-105 active:scale-95 overflow-hidden"
           >
-            {t('hero_btn1')}
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+            <span className="relative z-10 flex items-center gap-2">
+              {t('hero_btn1')}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-50 to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </a>
           <button
             onClick={() => setShowCausePopup(true)}
-            className="inline-flex items-center gap-2 px-8 py-4 glass-dark text-white font-medium rounded-full hover:bg-white/20 transition-all duration-300 cursor-pointer"
+            className="group inline-flex items-center gap-2 px-8 py-4 glass-dark text-white font-medium rounded-full hover:bg-white/20 transition-all duration-500 cursor-pointer active:scale-95"
           >
-            <DropletOff className="w-4 h-4" />
+            <DropletOff className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
             {t('hero_btn2')}
           </button>
         </div>
@@ -128,7 +167,7 @@ export default function Hero() {
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <div className="flex items-center justify-center mb-2">
-                <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
                   <AlertTriangle className="h-7 w-7 text-orange-500" />
                 </div>
               </div>
@@ -158,8 +197,8 @@ export default function Hero() {
         </Dialog>
       </div>
 
-      {/* Wave SVGs */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Wave SVGs — bottom transition */}
+      <div className="absolute bottom-0 left-0 w-full pointer-events-none" aria-hidden="true">
         <svg
           className="wv absolute bottom-0 w-[200%] h-20 sm:h-24"
           viewBox="0 0 1440 120"
@@ -184,10 +223,12 @@ export default function Hero() {
         </svg>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="sb absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
-        <span className="text-xs font-medium text-white/50">{t('hero_scroll')}</span>
-        <ChevronDown className="h-5 w-5 text-white/50" />
+      {/* Scroll indicator — animated down arrow */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+        <span className="text-xs font-medium text-white/50 tracking-wider uppercase">{t('hero_scroll')}</span>
+        <div className="sb">
+          <ChevronDown className="h-6 w-6 text-white/60" />
+        </div>
       </div>
     </section>
   );

@@ -213,6 +213,7 @@ export async function POST(request: NextRequest) {
     const imageUrl = `data:${finalMime};base64,${base64Image}`;
 
     const response = await zai.chat.completions.createVision({
+      model: 'glm-4.6v',
       messages: [
         { role: 'system', content: VISION_SYSTEM_PROMPT },
         {

@@ -18,7 +18,9 @@ import {
 const NAV_LINKS = [
   { href: '#penyebab', labelKey: 'nav_cause' },
   { href: '#data', labelKey: 'nav_data' },
+  { href: '#peta', labelKey: 'nav_map' },
   { href: '#langkah', labelKey: 'nav_steps' },
+  { href: '#kalkulator', labelKey: 'nav_calc' },
   { href: '#dampak', labelKey: 'nav_impact' },
 ] as const;
 
@@ -314,7 +316,20 @@ export default function Navbar() {
     return () => { window.clearTimeout(langSnapTimer.current); };
   }, []);
 
-  const handleNavClick = () => { closeNavDropdown(); };
+  const handleNavClick = (href: string) => {
+    closeNavDropdown();
+    // Retry scroll in case element isn't ready yet (dynamic imports)
+    const tryScroll = (attempts: number) => {
+      if (attempts <= 0) return;
+      const el = document.querySelector(href);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        setTimeout(() => tryScroll(attempts - 1), 200);
+      }
+    };
+    setTimeout(() => tryScroll(5), 100);
+  };
 
   const handleCauseClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -580,8 +595,18 @@ export default function Navbar() {
       </Dialog>
     </nav>
 
+    {/* Full-screen backdrop — blocks interaction with content behind dropdown */}
+    {mobileOpen && (
+      <div
+        className="fixed inset-0 z-30 bg-black/20 backdrop-blur-[2px]"
+        onClick={closeNavDropdown}
+        aria-hidden="true"
+        style={{ animation: 'backdropFadeIn 0.3s ease-out forwards' }}
+      />
+    )}
+
     {/* Nav dropdown — frosted glass panel, fixed below nav bar */}
-    <div className="fixed top-[4.5rem] left-0 right-0 z-40">
+    <div className={`fixed top-[4.5rem] left-0 right-0 z-40 ${!navDropdownContentVisible ? 'pointer-events-none' : 'pointer-events-auto'}`}>
       {/* Panel content */}
       <div className={`nav-dropdown-goo-panel glass-panel prismatic-border prismatic-caustic ${navDropdownContentVisible ? 'visible' : ''}`}>
         <div className="px-3 pb-0 pt-0 space-y-0">
@@ -599,7 +624,7 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => { handleNavClick(); }}
+                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
                 className="mobile-nav-item flex items-center justify-center w-full rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white/10 dark:hover:bg-white/8 transition-colors"
                 style={{ transitionDelay: navDropdownContentVisible ? `${i * 0.06}s` : '0s', height: '42px' }}
               >

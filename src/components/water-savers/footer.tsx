@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-animations';
 const NAV_LINKS = [
   { href: '#penyebab', labelKey: 'nav_cause_m' },
   { href: '#data', labelKey: 'nav_data_m' },
+  { href: '#peta', labelKey: 'nav_map_m' },
   { href: '#langkah', labelKey: 'nav_steps_m' },
   { href: '#dampak', labelKey: 'nav_impact_m' },
 ];
@@ -35,8 +36,11 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-ocean-950 dark:bg-gray-950 pt-16 pb-8 border-t border-white/5 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-6">
+    <footer className="bg-ocean-950 dark:bg-gray-950 pt-0 pb-8 relative">
+      {/* Animated gradient line at very top */}
+      <div className="footer-gradient-line" aria-hidden="true" />
+
+      <div className="max-w-7xl mx-auto px-6 pt-16">
         <div className="grid md:grid-cols-3 gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-1">
@@ -49,15 +53,15 @@ function Footer() {
                 <span className="text-[10px] text-cyan-400 font-semibold tracking-wider uppercase">{t('ft_slogan')}</span>
               </div>
             </div>
-            <p className="text-white/40 text-xs leading-relaxed mb-4">{t('ft_desc')}</p>
+            <p className="text-white/40 text-xs leading-relaxed mb-5">{t('ft_desc')}</p>
             <div className="flex items-center gap-3">
-              <button onClick={() => handleSocialClick('Instagram')} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer" aria-label="Instagram">
+              <button onClick={() => handleSocialClick('Instagram')} className="social-icon-hover w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center cursor-pointer" aria-label="Instagram">
                 <Instagram className="w-4 h-4 text-white/50" />
               </button>
-              <button onClick={() => handleSocialClick('YouTube')} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer" aria-label="YouTube">
+              <button onClick={() => handleSocialClick('YouTube')} className="social-icon-hover w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center cursor-pointer" aria-label="YouTube">
                 <Youtube className="w-4 h-4 text-white/50" />
               </button>
-              <button onClick={() => handleSocialClick('X')} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer" aria-label="X">
+              <button onClick={() => handleSocialClick('X')} className="social-icon-hover w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center cursor-pointer" aria-label="X">
                 <XLogo className="w-4 h-4 text-white/50" />
               </button>
             </div>
@@ -65,11 +69,11 @@ function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="text-white/70 text-xs font-bold uppercase tracking-widest mb-4">{t('ft_nav_title')}</h4>
-            <ul className="space-y-2">
+            <h4 className="text-white/70 text-xs font-bold uppercase tracking-widest mb-5">{t('ft_nav_title')}</h4>
+            <ul className="space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-white/40 text-xs hover:text-cyan-400 transition-colors">
+                  <a href={link.href} className="footer-link-hover text-white/40 text-xs">
                     {t(link.labelKey)}
                   </a>
                 </li>
@@ -79,10 +83,10 @@ function Footer() {
 
           {/* Data sources */}
           <div>
-            <h4 className="text-white/70 text-xs font-bold uppercase tracking-widest mb-4">{t('ft_src_title')}</h4>
+            <h4 className="text-white/70 text-xs font-bold uppercase tracking-widest mb-5">{t('ft_src_title')}</h4>
             <ul className="space-y-2">
               {DATA_SOURCES.map((src) => (
-                <li key={src.id} className="text-white/40 text-xs leading-relaxed">{lang === 'id' ? src.id : src.en}</li>
+                <li key={src.id} className="footer-src-hover text-white/40 text-xs leading-relaxed">{lang === 'id' ? src.id : src.en}</li>
               ))}
             </ul>
           </div>
@@ -91,9 +95,9 @@ function Footer() {
         {/* Copyright */}
         <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/25 text-xs">{t('ft_copy')}</p>
-          <p className="text-white/25 text-xs">
+          <p className="text-white/25 text-xs flex items-center gap-1.5">
             Every drop matters for our future{' '}
-            <Droplets className="inline-block align-middle w-3 h-3 text-blue-400" />
+            <Droplets className="w-3 h-3 text-blue-400" />
           </p>
         </div>
       </div>

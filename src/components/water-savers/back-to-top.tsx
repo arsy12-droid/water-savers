@@ -20,12 +20,15 @@ function BackToTop() {
     <button
       id="btt"
       onClick={scrollToTop}
-      className={`fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full bg-blue-600 dark:bg-cyan-600 text-white shadow-lg shadow-blue-600/30 dark:shadow-cyan-600/30 hover:bg-blue-700 dark:hover:bg-cyan-700 hover:scale-110 transition-all duration-300 flex items-center justify-center ${
+      className={`fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full text-white flex items-center justify-center btt-enhanced shadow-lg shadow-blue-500/30 hover:scale-110 active:scale-95 transition-transform duration-300 ${
         visible ? 'show' : 'hide'
       }`}
+      style={{
+        background: 'linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)',
+      }}
       aria-label="Back to top"
     >
-      <ChevronUp className="h-5 w-5" />
+      <ChevronUp className="h-5 w-5 relative z-10" />
     </button>
   );
 }

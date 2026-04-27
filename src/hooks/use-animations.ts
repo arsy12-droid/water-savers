@@ -13,8 +13,8 @@ export function useScrollAnimation() {
             const el = entry.target;
             el.classList.add('visible');
 
-            // Trigger bar-fill and num-reveal animations for children
-            el.querySelectorAll('.bar-fill').forEach((b, i) => {
+            // Trigger bar-fill and bar-fill-enhanced animations for children
+            el.querySelectorAll('.bar-fill, .bar-fill-enhanced').forEach((b, i) => {
               setTimeout(() => b.classList.add('visible'), i * 120);
             });
             el.querySelectorAll('.num-reveal').forEach((n, i) => {

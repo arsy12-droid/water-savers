@@ -34,7 +34,7 @@ const DELAYS = ['', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9'];
 const StepCard = memo(function StepCard({ step, delay, t }: { step: StepItem; delay: string; t: (key: string) => string }) {
   return (
     <div
-      className={`anim ${delay} step-card ${step.stepClass} bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm relative`}
+      className={`anim ${delay} step-card-enhanced card-glow ${step.stepClass} bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm relative`}
     >
       <span className="step-num" aria-hidden="true">{step.stepNum}</span>
       <div className={`step-icon-inner w-11 h-11 rounded-xl bg-gradient-to-br ${step.gradientClasses} flex items-center justify-center mb-3 shadow-lg text-lg`}>
@@ -54,12 +54,19 @@ function Steps() {
   const { t } = useLanguage();
 
   return (
-    <section id="langkah" aria-labelledby="steps-heading" className="relative py-24">
+    <section id="langkah" aria-labelledby="steps-heading" className="relative py-24 steps-dot-bg overflow-hidden">
+      {/* Top gradient divider */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400" aria-hidden="true" />
+
+      {/* Floating decorative blobs */}
+      <div className="steps-blob-1 absolute -top-20 -left-32 w-72 h-72 rounded-full bg-blue-400/[0.07] dark:bg-blue-500/[0.04] blur-3xl pointer-events-none" aria-hidden="true" />
+      <div className="steps-blob-2 absolute top-1/3 -right-28 w-80 h-80 rounded-full bg-cyan-400/[0.06] dark:bg-cyan-500/[0.03] blur-3xl pointer-events-none" aria-hidden="true" />
+      <div className="steps-blob-3 absolute -bottom-16 left-1/4 w-64 h-64 rounded-full bg-teal-400/[0.06] dark:bg-teal-500/[0.03] blur-3xl pointer-events-none" aria-hidden="true" />
+
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16 anim-blur">
-          <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 badge-dot bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full mb-5 shadow-sm ring-1 ring-blue-200/60 dark:ring-blue-700/30">
             <Footprints className="h-4 w-4" />
             <span>{t('steps_badge')}</span>
           </div>
@@ -67,11 +74,11 @@ function Steps() {
             {t('steps_title')} <span className="tg">{t('steps_title_accent')}</span>
           </h2>
           <div className="anim mb-6 flex items-center justify-center gap-2">
-            <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-bold px-4 py-2 rounded-lg">
+            <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-bold px-4 py-2 rounded-lg shadow-sm">
               <Sparkles className="h-4 w-4" />
               <span>{t('steps_campaign_label')}</span>
             </div>
-            <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-wider uppercase px-4 py-2 rounded-lg">{t('ft_brand')}</div>
+            <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-wider uppercase px-4 py-2 rounded-lg shadow-sm">{t('ft_brand')}</div>
           </div>
           <p className="anim d2 text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto mb-4">
             {t('steps_desc')}
@@ -79,22 +86,28 @@ function Steps() {
           <p className="anim d3 text-gray-400 dark:text-gray-500 text-sm max-w-xl mx-auto italic">{t('steps_quote')}</p>
         </div>
 
-        {/* Step cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-          {STEPS.map((step, i) => (
-            <StepCard key={step.stepNum} step={step} delay={DELAYS[i]} t={t} />
-          ))}
+        {/* Step cards with connecting dots overlay */}
+        <div className="relative mb-14">
+          {/* Connecting dots decorative layer behind cards */}
+          <div className="steps-connect-dots absolute inset-0 pointer-events-none hidden lg:block" aria-hidden="true" />
+          <div className="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {STEPS.map((step, i) => (
+              <StepCard key={step.stepNum} step={step} delay={DELAYS[i]} t={t} />
+            ))}
+          </div>
         </div>
 
-        {/* Calculator card */}
-        <div className="anim-scale bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden pulse-glow">
+        {/* Calculator promo card — enhanced glassmorphism */}
+        <div className="anim-scale steps-calc-glass bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 rounded-3xl p-8 md:p-12 text-center text-white relative pulse-glow">
           <div className="shimmer absolute inset-0 rounded-3xl" aria-hidden="true" />
+          {/* Decorative circles */}
           <div className="absolute top-0 right-0 w-52 h-52 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" aria-hidden="true" />
           <div className="absolute bottom-0 left-0 w-36 h-36 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" aria-hidden="true" />
+          <div className="absolute top-1/2 left-1/2 w-48 h-48 bg-white/[0.04] rounded-full -translate-x-1/2 -translate-y-1/2 blur-xl" aria-hidden="true" />
           <div className="relative z-10">
             <h3 className="text-xl md:text-3xl font-black mb-3">{t('calc_title')}</h3>
             <p className="text-blue-100/80 mb-6">{t('calc_desc')}</p>
-            <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-5">
+            <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-5 ring-1 ring-white/20">
               <Droplets className="w-8 h-8" />
               <span className="text-4xl md:text-6xl font-black counter-glow">50-70</span>
               <span className="text-lg md:text-xl font-semibold">{t('calc_unit')}</span>

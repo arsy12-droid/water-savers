@@ -63,6 +63,16 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Cache-Control for static assets (GeoJSON, images, fonts)
+      {
+        source: "/(indonesia-38-provinces.geojson|aquai-avatar.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
       // CSP + Cache-Control for API routes
       {
         source: "/api/:path*",
@@ -90,6 +100,8 @@ const nextConfig: NextConfig = {
       "react-markdown",
       "remark-gfm",
       "date-fns",
+      "framer-motion",
+      "react-leaflet",
       "@radix-ui/react-dialog",
       "@radix-ui/react-scroll-area",
       "@radix-ui/react-tooltip",

@@ -8,12 +8,39 @@ import Hero from '@/components/water-savers/hero';
 import Causes from '@/components/water-savers/causes';
 import DataSection from '@/components/water-savers/data-section';
 import Steps from '@/components/water-savers/steps';
+
 import Footer from '@/components/water-savers/footer';
 import BackToTop from '@/components/water-savers/back-to-top';
+
+const WaterCrisisMapLazy = dynamic(
+  () => import('@/components/water-savers/water-crisis-map'),
+  {
+    ssr: false,
+    loading: () => (
+      <section id="peta" className="relative py-20 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="h-8 w-48 bg-gray-200 dark:bg-gray-800 rounded-full mx-auto mb-4 animate-pulse" />
+            <div className="h-10 w-80 bg-gray-200 dark:bg-gray-800 rounded-lg mx-auto mb-3 animate-pulse" />
+            <div className="h-4 w-96 max-w-full bg-gray-100 dark:bg-gray-800 rounded mx-auto animate-pulse" />
+          </div>
+          <div className="h-[400px] bg-gray-100 dark:bg-gray-800 rounded-2xl animate-pulse" />
+        </div>
+      </section>
+    ),
+  }
+);
 
 // Lazy-load below-fold sections for faster initial paint
 const ImpactLazy = dynamic(() => import('@/components/water-savers/impact'), { ssr: true });
 const CTALazy = dynamic(() => import('@/components/water-savers/cta'), { ssr: true });
+const CalculatorLazy = dynamic(
+  () => import('@/components/water-savers/water-footprint-calculator'),
+  {
+    ssr: false,
+    loading: () => <div id="kalkulator" />,
+  }
+);
 
 // Dynamic import for ChatAssistant — loads ReactMarkdown, remarkGfm lazily (reduces initial JS by ~40KB)
 const ChatAssistant = dynamic(
@@ -44,7 +71,9 @@ function AppContent() {
         <Hero />
         <Causes />
         <DataSection />
+        <WaterCrisisMapLazy />
         <Steps />
+        <div id="kalkulator"><CalculatorLazy /></div>
         <ImpactLazy />
         <CTALazy />
       </main>

@@ -103,6 +103,67 @@ const SEED_DATA = [
     answer: "Coral reefs are incredibly important, often called the \"rainforests of the sea\" because of their extraordinary biodiversity:\n\n🐠 Home to 25% of all marine species\n🛡️ Protect coastlines from erosion and storms\n💰 Support fisheries that feed 500 million people\n💊 Source of medicines (cancer, heart disease treatments)\n💰 Contribute trillions of dollars to the global economy\n\nSadly, 70% of Indonesia's coral reefs are already damaged due to global warming, pollution, and destructive fishing. Indonesia has the world's second-largest coral reef system after Australia — so protecting them is our huge responsibility 🐠",
     lang: 'en',
   },
+  // --- Website Water Savers FAQ ---
+  {
+    question: 'website ini tentang apa?',
+    answer: 'Website Water Savers Team itu platform edukasi hemat air buat generasi muda Indonesia! 💧\n\nDi sini kamu bisa:\n🗺️ Jelajahi Peta Krisis Air Indonesia — 38 provinsi dengan data stres air terbaru\n🧮 Hitung jejak air harianmu di Kalkulator Jejak Air\n📊 Lihat data krisis air Indonesia yang mengkhawatirkan\n💡 Pelajari 10 langkah hemat air yang praktis\n🌊 Pahami dampak krisis air dan proyeksi ke depan\n\nDibuat oleh sekelompok pelajar Indonesia yang percaya "Every drop matters for our future" 🌊',
+    lang: 'id',
+  },
+  {
+    question: 'what is this website about?',
+    answer: "The Water Savers Team website is a water conservation education platform for Indonesia's young generation! 💧\n\nHere you can:\n🗺️ Explore the Indonesia Water Crisis Map — 38 provinces with the latest water stress data\n🧮 Calculate your daily water footprint in the Water Footprint Calculator\n📊 See alarming water crisis data from Indonesia\n💡 Learn 10 practical water-saving steps\n🌊 Understand the impact of water crisis and future projections\n\nCreated by a group of Indonesian students who believe \"Every drop matters for our future\" 🌊",
+    lang: 'en',
+  },
+  {
+    question: 'siapa yang buat website ini?',
+    answer: 'Website Water Savers Team dibuat oleh sekelompok pelajar Indonesia! 💪\n\nMereka percaya bahwa perubahan besar dimulai dari kebiasaan kecil — kayak matikan keran sikat gigi atau pakai tumbler. Tujuannya edukasi teman-teman sebaya soal pentingnya hemat air buat masa depan Indonesia 🇮🇩💧',
+    lang: 'id',
+  },
+  {
+    question: 'who made this website?',
+    answer: "The Water Savers Team website was created by a group of Indonesian students! 💪\n\nThey believe that big change starts with small habits — like turning off the tap while brushing or using a tumbler. Their goal is to educate their peers about the importance of saving water for Indonesia's future 🇮🇩💧",
+    lang: 'en',
+  },
+  {
+    question: 'apa saja fitur di website ini?',
+    answer: 'Banyak fitur keren di sini! 💧\n\n1️⃣ **Peta Krisis Air Indonesia** — Peta interaktif 38 provinsi, klik provinsi buat lihat detail stres air, akses air bersih, dan masalah utama\n\n2️⃣ **Kalkulator Jejak Air** — Jawab pertanyaan tentang kebiasaan harianmu, terus lihat berapa liter air yang kamu pakai per hari. Ada kategorinya juga: Hemat Air, Normal, Boros, atau Sangat Boros\n\n3️⃣ **Penyebab Krisis Air** — 6 penyebab utama dari pencemaran industri sampai infrastruktur buruk\n\n4️⃣ **Data Indonesia** — Statistik krisis air lengkap dengan chart penggunaan air rumah tangga\n\n5️⃣ **10 Langkah Hemat Air** — Tips praktis dari SD sampai SMA\n\n6️⃣ **Dampak Krisis Air** — Dampak negatif & positif + proyeksi kekeringan 25 tahun ke depan\n\n7️⃣ **AquAI (ini aku!)** — Chat interaktif buat tanya apa aja soal air 🤖💧',
+    lang: 'id',
+  },
+  {
+    question: 'what features does this website have?',
+    answer: "There are lots of cool features here! 💧\n\n1️⃣ **Indonesia Water Crisis Map** — Interactive map of 38 provinces, click any province to see water stress details, clean water access, and main issues\n\n2️⃣ **Water Footprint Calculator** — Answer questions about your daily habits and see how many liters of water you use per day. Get categorized: Water Saver, Normal, Wasteful, or Very Wasteful\n\n3️⃣ **Causes of Water Crisis** — 6 main causes from industrial pollution to poor infrastructure\n\n4️⃣ **Indonesian Data** — Complete water crisis statistics with household water usage chart\n\n5️⃣ **10 Water Saving Steps** — Practical tips for elementary to high school students\n\n6️⃣ **Impact of Water Crisis** — Negative & positive impacts + 25-year drought projections\n\n7️⃣ **AquAI (that's me!)** — Interactive chat to ask anything about water 🤖💧",
+    lang: 'en',
+  },
+  {
+    question: 'gimana cara pakai kalkulator jejak air?',
+    answer: 'Gampang banget! 💧\n\nKalkulator Jejak Air ada di bagian tengah website. Cara pakainya:\n\n1️⃣ **Langkah 1: Aktivitas Harian** — Atur slider durasi mandi, jawab Ya/Tidak buat sikat gigi dengan keran menyala, isi cuci tangan & siram toilet per hari\n\n2️⃣ **Langkah 2: Kebiasaan Makan & Minum** — Apakah masih pakai botol plastik? Berapa kali masak & cuci piring per hari?\n\n3️⃣ **Langkah 3: Kebiasaan Luar Ruangan** — Siram tanaman, cuci kendaraan, dan apakah sering bermain air\n\n4️⃣ **Hasil** — Langsung kelihatan total air per hari, per bulan, per tahun! Dibandingkan sama standar WHO (50 L/hari) dan rata-rata Indonesia (150 L/hari). Ada kategorinya juga: Hemat Air 🌿, Normal ✅, Boros ⚠️, atau Sangat Boros 🚨\n\nHasilnya bisa di-share juga loh! 📱',
+    lang: 'id',
+  },
+  {
+    question: 'how to use the water footprint calculator?',
+    answer: "Super easy! 💧\n\nThe Water Footprint Calculator is in the middle section of the website. Here's how:\n\n1️⃣ **Step 1: Daily Activities** — Adjust your shower duration slider, answer Yes/No for brushing teeth with tap running, fill in handwashing & toilet flushes per day\n\n2️⃣ **Step 2: Food & Drink Habits** — Do you still use plastic bottles? How many times do you cook & wash dishes per day?\n\n3️⃣ **Step 3: Outdoor Habits** — Watering plants, washing vehicles, and do you often play with water\n\n4️⃣ **Results** — Instantly see your total water per day, month, year! Compared with WHO standard (50 L/day) and Indonesia average (150 L/day). You'll get categorized: Water Saver 🌿, Normal ✅, Wasteful ⚠️, or Very Wasteful 🚨\n\nYou can share your results too! 📱",
+    lang: 'en',
+  },
+  {
+    question: 'apa itu peta krisis air di website ini?',
+    answer: 'Peta Krisis Air Indonesia itu fitur peta interaktif yang nunjukin level stres air di 38 provinsi seluruh Indonesia! 🗺️\n\nFitur-fiturnya:\n- Warna provinsi beda-beda berdasarkan level stres air (hijau = rendah, merah = tinggi)\n- Klik provinsi mana aja buat lihat detail: level stres air, persentase akses air bersih, dan masalah utama\n- Ada filter buat lihat provinsi berdasarkan level stres air\n- Bisa di-fullscreen buat lihat lebih detail\n- Data terbaru dari BMKG 2025, WRI Aqueduct 4.0, dan BPS Susenas 2024/2025\n\nCoba klik provinsimu sendiri — siapa tau hasilnya mengejutkan! 🤔',
+    lang: 'id',
+  },
+  {
+    question: 'what is the water crisis map on this website?',
+    answer: "The Indonesia Water Crisis Map is an interactive map feature showing water stress levels across all 38 provinces of Indonesia! 🗺️\n\nFeatures:\n- Province colors vary based on water stress level (green = low, red = high)\n- Click any province to see details: water stress level, clean water access percentage, and main issues\n- Filter to view provinces by water stress level\n- Fullscreen mode for a closer look\n- Latest data from BMKG 2025, WRI Aqueduct 4.0, and BPS Susenas 2024/2025\n\nTry clicking on your own province — the results might surprise you! 🤔",
+    lang: 'en',
+  },
+  {
+    question: 'website ini bisa diakses bahasa apa?',
+    answer: 'Website ini dukung 2 bahasa: Bahasa Indonesia dan English! 🇮🇩🇬🇧\n\nBisa di-switch kapan aja langsung dari menu navigasi. Jadi buat teman-teman yang mau belajar bahasa Inggris sambil belajar soal hemat air, bisa banget! 💧',
+    lang: 'id',
+  },
+  {
+    question: 'what languages does this website support?',
+    answer: "This website supports 2 languages: Bahasa Indonesia and English! 🇮🇩🇬🇧\n\nYou can switch between them anytime from the navigation menu. Great for friends who want to practice English while learning about water conservation! 💧",
+    lang: 'en',
+  },
 ];
 
 export async function POST(request: NextRequest) {

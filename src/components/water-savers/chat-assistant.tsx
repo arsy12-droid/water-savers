@@ -38,8 +38,8 @@ const MAX_CHAT_MESSAGES = 80;
 // ── Markdown Components (extracted outside render to avoid re-creation per message) ──
 
 const MARKDOWN_COMPONENTS = {
-  p: ({ children }: { children: React.ReactNode }) => <p className="mb-1.5 last:mb-0">{children}</p>,
-  a: ({ href, children }: { href?: string; children: React.ReactNode }) => {
+  p: ({ children }: { children?: React.ReactNode }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+  a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
     const safeHref = href && !href.startsWith('javascript:') && !href.startsWith('data:') && !href.startsWith('vbscript:') ? href : undefined;
     return safeHref ? (
       <a href={safeHref} target="_blank" rel="noopener noreferrer" className="text-blue-500 dark:text-blue-400 underline hover:text-blue-600 dark:hover:text-blue-300 break-all">
@@ -49,41 +49,41 @@ const MARKDOWN_COMPONENTS = {
       <span className="text-gray-400 line-through">{children}</span>
     );
   },
-  ul: ({ children }: { children: React.ReactNode }) => <ul className="list-disc list-inside my-1 space-y-0.5">{children}</ul>,
-  ol: ({ children }: { children: React.ReactNode }) => <ol className="list-decimal list-inside my-1 space-y-0.5">{children}</ol>,
-  li: ({ children }: { children: React.ReactNode }) => <li className="leading-snug">{children}</li>,
-  strong: ({ children }: { children: React.ReactNode }) => <strong className="font-bold">{children}</strong>,
-  code: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => {
+  ul: ({ children }: { children?: React.ReactNode }) => <ul className="list-disc list-inside my-1 space-y-0.5">{children}</ul>,
+  ol: ({ children }: { children?: React.ReactNode }) => <ol className="list-decimal list-inside my-1 space-y-0.5">{children}</ol>,
+  li: ({ children }: { children?: React.ReactNode }) => <li className="leading-snug">{children}</li>,
+  strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-bold">{children}</strong>,
+  code: ({ className, children, ...props }: { className?: string; children?: React.ReactNode }) => {
     if (!className) {
       return <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-xs font-mono" {...props}>{children}</code>;
     }
     return <code className={`${className} block`}{...props}>{children}</code>;
   },
-  pre: ({ children }: { children: React.ReactNode }) => (
+  pre: ({ children }: { children?: React.ReactNode }) => (
     <pre className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 my-1.5 overflow-x-auto text-xs font-mono leading-relaxed border border-gray-200 dark:border-gray-700">
       {children}
     </pre>
   ),
-  blockquote: ({ children }: { children: React.ReactNode }) => (
+  blockquote: ({ children }: { children?: React.ReactNode }) => (
     <blockquote className="border-l-2 border-cyan-400 dark:border-cyan-600 pl-3 my-1.5 italic text-gray-600 dark:text-gray-400">
       {children}
     </blockquote>
   ),
-  table: ({ children }: { children: React.ReactNode }) => (
+  table: ({ children }: { children?: React.ReactNode }) => (
     <div className="overflow-x-auto my-1.5">
       <table className="text-xs border-collapse w-full">{children}</table>
     </div>
   ),
-  th: ({ children }: { children: React.ReactNode }) => (
+  th: ({ children }: { children?: React.ReactNode }) => (
     <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 bg-gray-100 dark:bg-gray-800 font-semibold text-left">{children}</th>
   ),
-  td: ({ children }: { children: React.ReactNode }) => (
+  td: ({ children }: { children?: React.ReactNode }) => (
     <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{children}</td>
   ),
   hr: () => <hr className="my-2 border-gray-300 dark:border-gray-600" />,
-  h1: ({ children }: { children: React.ReactNode }) => <h1 className="text-base font-bold mt-2 mb-1">{children}</h1>,
-  h2: ({ children }: { children: React.ReactNode }) => <h2 className="text-sm font-bold mt-1.5 mb-0.5">{children}</h2>,
-  h3: ({ children }: { children: React.ReactNode }) => <h3 className="text-sm font-semibold mt-1 mb-0.5">{children}</h3>,
+  h1: ({ children }: { children?: React.ReactNode }) => <h1 className="text-base font-bold mt-2 mb-1">{children}</h1>,
+  h2: ({ children }: { children?: React.ReactNode }) => <h2 className="text-sm font-bold mt-1.5 mb-0.5">{children}</h2>,
+  h3: ({ children }: { children?: React.ReactNode }) => <h3 className="text-sm font-semibold mt-1 mb-0.5">{children}</h3>,
 };
 
 const INITIAL_MESSAGES_ID = {
@@ -271,7 +271,7 @@ export default function ChatAssistant() {
       role: 'user',
       content: input.trim() || (lang === 'id' ? '📷 Analisis gambar ini' : '📷 Analyze this image'),
       timestamp: new Date(),
-      image: selectedImage,
+      image: selectedImage ?? undefined,
     };
 
     setMessages((prev) => [...prev, userMessage].slice(-MAX_CHAT_MESSAGES));
@@ -605,7 +605,7 @@ export default function ChatAssistant() {
           <div className="chat-panel-section flex items-center justify-between px-4 py-3 bg-gradient-to-r from-cyan-500 to-ocean-600 text-white shrink-0 rounded-t-2xl" style={{ '--section-delay': '0.18s' } as React.CSSProperties}>
             <div className="flex items-center gap-0.5">
               <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white/30">
-                <img src="/aquai-avatar.png" alt="AquAI" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                <img src="/aquai-avatar.webp" alt="AquAI" className="w-full h-full object-cover" loading="lazy" decoding="async" />
               </div>
               <div className="pl-2">
                 <h3 className="text-sm font-bold leading-tight">AquAI 💧</h3>
@@ -656,7 +656,7 @@ export default function ChatAssistant() {
                     {msg.role === 'user' ? (
                       <User className="h-6 w-6 text-ocean-600 dark:text-ocean-300" />
                     ) : (
-                      <img src="/aquai-avatar.png" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
+                      <img src="/aquai-avatar.webp" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
                     )}
                   </div>
                   <div className={`max-w-[80%] flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
@@ -693,6 +693,7 @@ export default function ChatAssistant() {
                               alt="Uploaded image"
                               className="max-h-40 w-auto rounded-lg mb-2 cursor-pointer"
                               onClick={() => {
+                                if (!msg.image) return;
                                 const a = document.createElement('a');
                                 a.href = msg.image;
                                 a.download = 'aquai-image.jpg';
@@ -753,7 +754,7 @@ export default function ChatAssistant() {
               {(isLoading || isAnalyzing) && messages.length > 0 && messages[messages.length - 1].content === '' && (
                 <div className="flex gap-2.5">
                   <div className="w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden">
-                    <img src="/aquai-avatar.png" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
+                    <img src="/aquai-avatar.webp" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
                   </div>
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-md px-4 py-3">
                     {isSearching ? (

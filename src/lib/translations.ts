@@ -8,12 +8,15 @@ export const translations: TranslationDict = {
   // Navigation
   nav_cause: { id: 'Penyebab', en: 'Causes' },
   nav_data: { id: 'Data', en: 'Data' },
+  nav_calc: { id: 'Kalkulator Air', en: 'Water Calculator' },
   nav_steps: { id: 'Langkah Hemat Air', en: 'Water Saving Steps' },
   nav_impact: { id: 'Dampak', en: 'Impact' },
+  nav_map: { id: 'Peta Krisis Air', en: 'Crisis Map' },
   nav_cause_m: { id: 'Penyebab Krisis Air', en: 'Causes of Water Crisis' },
   nav_data_m: { id: 'Data Indonesia', en: 'Indonesian Data' },
   nav_steps_m: { id: 'Langkah Hemat Air', en: 'Water Saving Steps' },
   nav_impact_m: { id: 'Dampak', en: 'Impact' },
+  nav_map_m: { id: 'Peta Krisis Air', en: 'Crisis Map' },
 
   // Hero
   hero_badge: { id: 'Untuk Generasi Muda Indonesia', en: "For Indonesia's Young Generation" },
@@ -42,13 +45,13 @@ export const translations: TranslationDict = {
   },
   c2_title: { id: 'Deforestasi Masif', en: 'Massive Deforestation' },
   c2_desc: {
-    id: 'Hutan yang mengatur siklus hidrologi terus ditebang. Global Forest Watch mencatat Indonesia kehilangan sekitar 1,7 juta hektar hutan alam dari 2021 hingga 2024.',
-    en: "Forests that regulate the hydrological cycle are continuously cut down. Global Forest Watch records that Indonesia lost ~1.7 million hectares of natural forest from 2021 to 2024.",
+    id: 'Hutan yang mengatur siklus hidrologi terus ditebang. Data SIMONTANA KLHK mencatat Indonesia kehilangan sekitar 580 ribu hektar hutan dari 2022 hingga 2024.',
+    en: 'Forests that regulate the hydrological cycle are continuously cut down. SIMONTANA (KLHK) data records Indonesia lost approximately 580 thousand hectares of forest from 2022 to 2024.',
   },
   c3_title: { id: 'Kebiasaan Pemborosan', en: 'Wasteful Habits' },
   c3_desc: {
-    id: 'Keran yang lupa ditutup mengalirkan 6 liter/menit (WHO), mandi terlalu lama memboroskan 45-60 liter (PDAM). Secara kumulatif, kebiasaan sepele ini menyumbang pemborosan besar di level rumah tangga.',
-    en: 'A forgotten running tap flows 6 liters/min (WHO), excessively long showers waste 45-60 liters (PDAM). Cumulatively, these trivial habits contribute to massive household water waste.',
+    id: 'Keran yang lupa ditutup mengalirkan 6 liter/menit (WHO), mandi terlalu lama memboroskan 45–60 liter. Secara kumulatif, kebiasaan sepele ini menyumbang pemborosan besar di tingkat rumah tangga.',
+    en: "A forgotten running tap flows 6 liters/min (WHO), and excessively long showers waste 45–60 liters. Cumulatively, these trivial habits contribute to massive household water waste.",
   },
   c4_title: { id: 'Perubahan Iklim', en: 'Climate Change' },
   c4_desc: {
@@ -68,12 +71,12 @@ export const translations: TranslationDict = {
 
   // Data
   data_badge: { id: 'Data Indonesia', en: 'Indonesian Data' },
-  data_title_accent: { id: 'Mengkhawatirkan', en: 'Figures' },
+  data_title_accent: { id: 'Mengkhawatirkan', en: 'Alarming' },
   data_title: { id: 'Angka yang', en: 'Alarming' },
   data_desc: { id: 'Data dari BPS, KLHK, WHO, dan World Resources Institute', en: 'Data from BPS, KLHK, WHO, and World Resources Institute' },
-  d1_desc: { id: 'Rumah tangga belum punya akses air minum layak (BPS, Susenas 2022)', en: 'Households without access to safe drinking water (BPS, Susenas 2022)' },
+  d1_desc: { id: '~10% rumah tangga belum memiliki akses air minum layak (BPS, Susenas 2023)', en: '~10% of households lack access to safe drinking water (BPS, Susenas 2023)' },
   d2_desc: { id: 'Sungai yang dipantau di Indonesia tercemar ringan hingga berat (BPS, Statistik Indonesia 2023)', en: 'Monitored rivers in Indonesia are mildly to heavily polluted (BPS, Statistics Indonesia 2023)' },
-  d3_desc: { id: 'Rata-rata air hilang dari PDAM sebelum sampai ke pelanggan (KPPIP, 2022)', en: 'Average PDAM water lost before reaching customers (KPPIP, 2022)' },
+  d3_desc: { id: 'Rata-rata kehilangan air PDAM sebelum sampai ke pelanggan (KPPIP, 2022)', en: 'Average PDAM water loss before reaching customers (KPPIP, 2022)' },
   d4_desc: { id: 'Indonesia masuk kategori Medium-High water stress (WRI Aqueduct, 2023)', en: 'Indonesia is in the Medium-High water stress category (WRI Aqueduct, 2023)' },
   chart_title: { id: 'Penggunaan Air Rumah Tangga Indonesia', en: 'Indonesian Household Water Usage' },
   b1_label: { id: 'Mandi & Kebersihan Diri', en: 'Bathing & Personal Hygiene' },
@@ -120,16 +123,103 @@ export const translations: TranslationDict = {
   s9_desc: { id: 'Kementerian PUPR mencatat sampah menyumbat 30% saluran drainase di kota besar, menyebabkan banjir dan mencemari sungai. Buang sampah pada tempatnya.', en: 'Ministry of PUPR records trash clogs 30% of drainage channels in major cities, causing floods and polluting rivers. Dispose of trash properly.' },
   s9_stat: { id: 'Jaga saluran air', en: 'Protect waterways' },
   s10_title: { id: 'Ajak Teman di Sekolah Ikut Hemat Air', en: 'Invite School Friends to Save Water' },
-  s10_desc: { id: 'Buat poster hemat air, share di media sosial, atau jadikan tema proyek PKH. 1 orang yang menginspirasi 10 teman = dampak 11x lipat.', en: 'Make water-saving posters, share on social media, or use it as a project theme. 1 person inspiring 10 friends = 11x multiplied impact.' },
+  s10_desc: { id: 'Buat poster hemat air, bagikan di media sosial, atau jadikan tema proyek PKH. 1 orang yang menginspirasi 10 teman = dampak 11 kali lipat.', en: 'Make water-saving posters, share on social media, or use it as a project theme. 1 person inspiring 10 friends = 11x multiplied impact.' },
   s10_stat: { id: 'Dampak berlipat', en: 'Multiplied impact' },
 
-  // Calculator
+  // Calculator (static card in steps section)
   calc_title: { id: 'Jika 1 Pelajar Melakukan 10 Langkah Ini', en: 'If One Student Takes These 10 Steps' },
   calc_desc: { id: 'Estimasi penghematan per hari:', en: 'Estimated savings per day:' },
   calc_unit: { id: 'liter/hari', en: 'liters/day' },
   calc_note_id_1: { id: 'Setara kebutuhan air 1 orang selama', en: "Equivalent to 1 person's water needs for" },
   calc_note_id_2: { id: 'jika konsisten setahun (standar WHO: minimum 50 liter/orang/hari untuk kebutuhan dasar).', en: 'if consistent for a year (WHO standard: minimum 50 liters/person/day for basic needs).' },
   calc_note_bold: { id: '4 bulan', en: '4 months' },
+
+  // Calculator section (interactive)
+  calc_section_badge: { id: 'Kalkulator Jejak Air', en: 'Water Footprint Calculator' },
+  calc_section_title_1: { id: 'Hitung Jejak Airmu', en: 'Calculate Your Water Footprint' },
+  calc_section_title_2: { id: 'Jawab pertanyaan di bawah untuk mengetahui seberapa banyak air yang kamu gunakan setiap hari', en: 'Answer the questions below to find out how much water you use every day' },
+  calc_step_label: { id: 'Langkah', en: 'Step' },
+  calc_step1_title: { id: 'Aktivitas Harian', en: 'Daily Activities' },
+  calc_step2_title: { id: 'Kebiasaan Makan & Minum', en: 'Food & Drink Habits' },
+  calc_step3_title: { id: 'Kebiasaan Luar Ruangan', en: 'Outdoor Habits' },
+  calc_step4_title: { id: 'Hasil Kalkulasi', en: 'Your Results' },
+
+  // Calculator sliders
+  calc_q1_label: { id: 'Durasi mandi per hari', en: 'Shower duration per day' },
+  calc_q1_unit: { id: 'menit', en: 'min' },
+  calc_q1_info: { id: 'Shower standar: 9-12 L/menit (PDAM)', en: 'Standard shower: 9-12 L/min (PDAM)' },
+  calc_q2_label: { id: 'Sikat gigi dengan keran menyala?', en: 'Brush teeth with tap running?' },
+  calc_q2_unit: { id: '', en: '' },
+  calc_q2_info: { id: 'Keran menyala saat sikat gigi: ~12 liter/hari (WHO)', en: 'Tap running while brushing: ~12 liters/day (WHO)' },
+  calc_q3_label: { id: 'Cuci tangan per hari', en: 'Handwashing per day' },
+  calc_q3_unit: { id: 'kali', en: 'times' },
+  calc_q3_info: { id: 'Sekali cuci tangan: ~1 liter air', en: 'One handwash: ~1 liter of water' },
+  calc_q4_label: { id: 'Siram toilet per hari', en: 'Toilet flushes per day' },
+  calc_q4_unit: { id: 'kali', en: 'times' },
+  calc_q4_info: { id: 'Sekali siram: ~6 liter air', en: 'One flush: ~6 liters of water' },
+  calc_q5_label: { id: 'Apakah masih menggunakan botol plastik?', en: 'Do you still use plastic bottles?' },
+  calc_q5_unit: { id: '', en: '' },
+  calc_q5_info: { id: 'Rata-rata penggunaan botol plastik: ~2 liter/hari (termasuk produksi)', en: 'Average plastic bottle usage: ~2 liters/day (including production)' },
+  calc_q6_label: { id: 'Memasak per hari', en: 'Cooking per day' },
+  calc_q6_unit: { id: 'kali', en: 'times' },
+  calc_q6_info: { id: 'Sekali memasak: ~10 liter air', en: 'One cooking session: ~10 liters of water' },
+  calc_q7_label: { id: 'Cuci piring per hari', en: 'Dish washing per day' },
+  calc_q7_unit: { id: 'kali', en: 'times' },
+  calc_q7_info: { id: 'Sekali cuci piring: ~10 liter air', en: 'One dish wash: ~10 liters of water' },
+  calc_q8_label: { id: 'Siram tanaman per minggu', en: 'Watering plants per week' },
+  calc_q8_unit: { id: 'kali', en: 'times' },
+  calc_q8_info: { id: 'Sekali siram tanaman: ~10 liter air', en: 'One plant watering: ~10 liters of water' },
+  calc_q9_label: { id: 'Apakah mencuci kendaraan sendiri?', en: 'Do you wash your own vehicle?' },
+  calc_q9_unit: { id: '', en: '' },
+  calc_q9_info: { id: 'Cuci kendaraan sendiri: ~11 liter/hari rata-rata', en: 'Washing your own vehicle: ~11 liters/day average' },
+  calc_q10_label: { id: 'Apakah sering bermain air?', en: 'Do you often play with water?' },
+  calc_q10_unit: { id: '', en: '' },
+  calc_q10_info: { id: 'Bermain air: ~4 liter/hari rata-rata', en: 'Playing with water: ~4 liters/day average' },
+
+  calc_toggle_yes: { id: 'Ya', en: 'Yes' },
+  calc_toggle_no: { id: 'Tidak', en: 'No' },
+
+  // Calculator unit
+  calc_liter_per_day: { id: 'L/hari', en: 'L/day' },
+  calc_approx_liter_per_day: { id: 'L/hari', en: 'L/day' },
+
+  // Calculator navigation
+  calc_prev: { id: 'Sebelumnya', en: 'Previous' },
+  calc_next: { id: 'Selanjutnya', en: 'Next' },
+  calc_restart: { id: 'Hitung Ulang', en: 'Recalculate' },
+
+  // Calculator results
+  calc_result_daily: { id: 'Total penggunaan air per hari', en: 'Total daily water usage' },
+  calc_result_monthly: { id: 'per bulan', en: '/month' },
+  calc_result_yearly: { id: 'per tahun', en: '/year' },
+  calc_result_vs_who: { id: 'Perbandingan dengan standar minimum WHO', en: 'Comparison with WHO minimum standard' },
+  calc_result_vs_avg: { id: 'Perbandingan dengan rata-rata Indonesia', en: 'Comparison with Indonesian average' },
+
+  // Calculator categories
+  calc_cat_saving: { id: 'Hemat Air! 🌿', en: 'Water Saver! 🌿' },
+  calc_cat_saving_desc: { id: 'Kamu sangat efisien dalam menggunakan air. Pertahankan kebiasaan baik ini!', en: 'You are very efficient with water usage. Keep up these great habits!' },
+  calc_cat_normal: { id: 'Penggunaan Normal ✅', en: 'Normal Usage ✅' },
+  calc_cat_normal_desc: { id: 'Penggunaan airmu sudah cukup baik, tapi masih bisa lebih hemat lagi.', en: 'Your water usage is quite good, but there is still room for improvement.' },
+  calc_cat_wasteful: { id: 'Cukup Boros ⚠️', en: 'Quite Wasteful ⚠️' },
+  calc_cat_wasteful_desc: { id: 'Kamu menggunakan air lebih dari rata-rata. Mari kurangi penggunaan air!', en: 'You use more water than average. Let us reduce your water usage!' },
+  calc_cat_very_wasteful: { id: 'Sangat Boros 🚨', en: 'Very Wasteful 🚨' },
+  calc_cat_very_wasteful_desc: { id: 'Penggunaan airmu sangat tinggi. Segera ubah kebiasaan untuk menyelamatkan air!', en: 'Your water usage is very high. Change your habits immediately to save water!' },
+
+  // Calculator tips
+  calc_tip_prefix: { id: 'Tips untuk Menghemat Air', en: 'Tips to Save Water' },
+  calc_tip1: { id: 'Kurangi durasi mandi menjadi 5 menit atau gunakan gayung untuk menghemat 15-30 liter per mandi', en: 'Reduce shower time to 5 minutes or use a dipper to save 15-30 liters per bath' },
+  calc_tip2: { id: 'Matikan keran saat menyikat gigi — bisa hemat hingga 12 liter per hari', en: 'Turn off the tap while brushing teeth — can save up to 12 liters per day' },
+  calc_tip3: { id: 'Gunakan toilet dual-flush atau teknologi hemat air untuk mengurangi penggunaan air', en: 'Use a dual-flush toilet or water-saving technology to reduce water usage' },
+  calc_tip4: { id: 'Beralih ke tumbler untuk mengurangi sampah plastik dan jejak air produksi botol', en: 'Switch to a tumbler to reduce plastic waste and bottle production water footprint' },
+  calc_tip5: { id: 'Cuci kendaraan hanya saat perlu dan gunakan gayung, bukan selang air yang mengalir terus', en: 'Wash your vehicle only when needed and use a dipper, not a running hose' },
+
+  // Calculator equivalents
+  calc_equiv_showers: { id: 'mandi 5 menit', en: '5-min showers' },
+  calc_equiv_bottles: { id: 'botol 500ml', en: '500ml bottles' },
+  calc_equiv_buckets: { id: 'gayung air', en: 'water dippers' },
+
+  // Calculator share
+  calc_share_text: { id: 'Bagikan Hasilnya', en: 'Share Results' },
 
   // Impact
   impact_badge: { id: 'Dampak', en: 'Impact' },
@@ -143,7 +233,7 @@ export const translations: TranslationDict = {
   n2_title: { id: 'Gagal Panen', en: 'Crop Failure' },
   n2_desc: { id: 'BMKG dan Kementan mencatat kekeringan 2023 menyebabkan lebih dari 250.000 hektar lahan pertanian terdampak secara nasional, dengan ribuan hektar mengalami gagal panen (puso).', en: 'BMKG and the Ministry of Agriculture report the 2023 drought affected more than 250,000 hectares of agricultural land nationwide, with thousands of hectares experiencing crop failure (puso).' },
   n3_title: { id: 'Amblesan Tanah', en: 'Land Subsidence' },
-  n3_desc: { id: 'BKAT mencatat Jakarta terus ambles dengan penurunan tanah mencapai 5,76 cm/tahun di beberapa wilayah utara akibat over-eksploitasi air tanah. Bandung Raya mengalami penurunan muka tanah serupa.', en: 'BKAT records Jakarta continues to sink with land subsidence reaching 5.76 cm/year in some northern areas due to groundwater over-exploitation. Bandung Metropolitan Area experiences similar land subsidence.' },
+  n3_desc: { id: 'BKAT (Balai Konservasi Air Tanah) mencatat Jakarta terus ambles dengan penurunan tanah mencapai 11 cm/tahun di beberapa wilayah utara akibat over-eksploitasi air tanah. Bandung Raya mengalami penurunan muka tanah serupa.', en: 'BKAT (Groundwater Conservation Center) records Jakarta continues to sink with land subsidence reaching up to 11 cm/year in some northern areas due to groundwater over-exploitation. Bandung Metropolitan Area experiences similar land subsidence.' },
   p1_title: { id: 'Masyarakat Lebih Sehat', en: 'Healthier Society' },
   p1_desc: { id: 'WHO menegaskan akses air bersih dan sanitasi layak menurunkan angka diare hingga 25-35%. Anak-anak bisa tumbuh sehat tanpa ancaman penyakit berbasis air seperti kolera dan tifoid.', en: 'WHO confirms access to clean water and proper sanitation reduces diarrhea rates by 25-35%. Children can grow healthy without the threat of waterborne diseases like cholera and typhoid.' },
   p2_title: { id: 'Pertanian Berkelanjutan', en: 'Sustainable Agriculture' },
@@ -155,9 +245,9 @@ export const translations: TranslationDict = {
   proj1_label: { id: 'Sekarang', en: 'Now' },
   proj1_desc: { id: 'Sekitar 30 juta orang mengalami kelangkaan air musiman di Indonesia', en: 'About 30 million people experience seasonal water scarcity in Indonesia' },
   proj2_label: { id: '5 Tahun', en: '5 Years' },
-  proj2_desc: { id: 'Diperkirakan lebih dari 40 juta orang akan terdampak kelangkaan air yang meningkat', en: 'An estimated more than 40 million people will be affected by increasing water scarcity' },
+  proj2_desc: { id: 'Diperkirakan lebih dari 40 juta orang akan terdampak kelangkaan air yang semakin meningkat', en: 'An estimated 40+ million people will be affected by increasing water scarcity' },
   proj3_label: { id: '15 Tahun', en: '15 Years' },
-  proj3_desc: { id: 'Sebagian besar kota besar Indonesia mengalami stres air tinggi', en: 'Most major Indonesian cities experience high water stress' },
+  proj3_desc: { id: 'Sebagian besar kota besar Indonesia akan mengalami stres air tinggi', en: 'Most major Indonesian cities will experience high water stress' },
   proj4_label: { id: '25 Tahun', en: '25 Years' },
   proj4_desc: { id: 'Risiko "Day Zero" (hari tanpa air) di beberapa wilayah Indonesia', en: 'Risk of "Day Zero" in some regions of Indonesia' },
 
@@ -193,4 +283,21 @@ export const translations: TranslationDict = {
 
   // Chat assistant
   chat_label: { id: 'Buka asisten hemat air', en: 'Open water assistant' },
+
+  // Water Crisis Map
+  map_badge: { id: 'Peta Krisis Air Indonesia', en: 'Indonesia Water Crisis Map' },
+  map_title_before: { id: 'Peta Krisis Air', en: 'Water Crisis Map' },
+  map_title_accent: { id: 'Indonesia', en: 'Indonesia' },
+  map_desc: {
+    id: 'Peta interaktif krisis air di Indonesia. Klik provinsi untuk melihat detail data stres air, akses air bersih, dan masalah utama. Data berdasarkan BMKG 2025, WRI Aqueduct 4.0, dan BPS Susenas 2024/2025.',
+    en: 'Interactive water crisis map of Indonesia. Click any province to see detailed water stress data, clean water access, and key issues. Data based on BMKG 2025, WRI Aqueduct 4.0, and BPS Susenas 2024/2025.',
+  },
+  map_stat_provinces: { id: 'Provinsi Dipetakan', en: 'Provinces Mapped' },
+  map_stat_crisis: { id: 'Provinsi Stres Tinggi', en: 'High Stress Provinces' },
+  map_stat_affected: { id: 'Populasi Terdampak', en: 'Affected Population' },
+  map_stat_access: { id: 'Akses Air Nasional', en: 'National Water Access' },
+  map_filter_label: { id: 'Filter', en: 'Filter' },
+  map_filter_all: { id: 'Semua', en: 'All' },
+  map_legend_title: { id: 'Level Stres Air', en: 'Water Stress Level' },
+  map_source: { id: 'Data: WRI Aqueduct 4.0 • BMKG 2025 • BPS Susenas 2024/2025', en: 'Data: WRI Aqueduct 4.0 • BMKG 2025 • BPS Susenas 2024/2025' },
 };
