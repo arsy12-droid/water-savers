@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import ZAI from 'z-ai-web-dev-sdk';
+import { groqChat, groqWebSearch, type GroqMessage } from '@/lib/groq';
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 import { securityGuard, getClientIp } from '@/lib/security';
 import { randomBytes } from 'node:crypto';
@@ -19,7 +19,7 @@ const feedbackPutSchema = z.object({
   sessionId: z.string().max(100).regex(/^[a-zA-Z0-9\-_]+$/),
   question: z.string().min(1).max(5000),
   answer: z.string().min(1).max(5000),
-  feedback: z.union([z.literal(1), z.literal(-1), z.literal(0)]), // 0 = remove/un-toggle
+  feedback: z.union([z.literal(1), z.literal(-1), z.literal(0)]),
   lang: z.enum(['id', 'en']).optional().default('id'),
   token: z.string().optional(),
 });
@@ -29,7 +29,7 @@ const chatDeleteSchema = z.object({
   token: z.string().min(1),
 });
 
-// ── Conversation Store with per-session locking (Bug #9) ─────────────────
+// ── Conversation Store with per-session locking ─────────────────────────
 
 interface ConversationHistory extends Array<{ role: string; content: string }> {
   lastAccess: number;
@@ -37,11 +37,10 @@ interface ConversationHistory extends Array<{ role: string; content: string }> {
 }
 
 const conversations = new Map<string, ConversationHistory>();
-const CONVERSATION_TTL = 30 * 60 * 1000; // 30 minutes
+const CONVERSATION_TTL = 30 * 60 * 1000;
 const MAX_CONVERSATIONS = 500;
 const MAX_MESSAGES = 30;
 
-// Per-session lock using promise queue (prevents TOCTOU race)
 const sessionQueues = new Map<string, Promise<void>>();
 
 async function acquireLock(sessionId: string): Promise<() => void> {
@@ -57,7 +56,6 @@ async function acquireLock(sessionId: string): Promise<() => void> {
   };
 }
 
-// Bug #21: LRU eviction — find least recently accessed conversation
 function evictLRU() {
   let oldestKey: string | null = null;
   let oldestAccess = Infinity;
@@ -73,25 +71,24 @@ function evictLRU() {
   }
 }
 
-// Periodically clean up stale conversations and session queues (every 5 minutes)
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, val] of conversations) {
-    if (now - val.lastAccess > CONVERSATION_TTL) {
-      conversations.delete(key);
-      sessionQueues.delete(key);
+if (typeof setInterval !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, val] of conversations) {
+      if (now - val.lastAccess > CONVERSATION_TTL) {
+        conversations.delete(key);
+        sessionQueues.delete(key);
+      }
     }
-  }
-}, 5 * 60 * 1000);
+  }, 5 * 60 * 1000);
+}
 
-// Generate a random session token for ownership verification
 function generateSessionToken(): string {
   return randomBytes(16).toString('hex');
 }
 
-// ── Content Moderation (Bug #14: strengthened) ──────────────────────────
+// ── Content Moderation ─────────────────────────────────────────────────
 
-// Content Moderation — HTML patterns checked on original content, URL patterns on normalized
 const BLOCKED_HTML_PATTERNS = [
   /<\s*script[^>]*>[\s\S]*?<\s*\/\s*script\s*>/gi,
   /<\s*iframe[^>]*>[\s\S]*?<\s*\/\s*iframe\s*>/gi,
@@ -111,24 +108,21 @@ const BLOCKED_URL_PATTERNS = [
   /\b(?:www\.|bit\.ly|t\.co|tinyurl)\.\S+/gi,
 ];
 
-// Normalization: strip ALL non-alphanumeric chars around URLs for detection
 function normalizeContent(content: string): string {
   return content
-    .replace(/[\u200B-\u200D\uFEFF]/g, '')  // Zero-width characters
-    .replace(/[^a-z0-9\s/:.]/gi, '')          // Strip non-alphanumeric (keeps URL chars)
-    .replace(/\s+/g, '')                       // Remove ALL whitespace
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .replace(/[^a-z0-9\s/:.]/gi, '')
+    .replace(/\s+/g, '')
     .toLowerCase();
 }
 
 function isContentSafe(content: string): boolean {
   if (!content || content.length > 5000) return false;
-  // Check original content for HTML/injection patterns
   const hasHtmlOrInjection = BLOCKED_HTML_PATTERNS.some(pattern => {
     pattern.lastIndex = 0;
     return pattern.test(content);
   });
   if (hasHtmlOrInjection) return false;
-  // Check normalized content for URL patterns (harder to obfuscate check)
   const normalized = normalizeContent(content);
   return !BLOCKED_URL_PATTERNS.some(pattern => {
     pattern.lastIndex = 0;
@@ -136,26 +130,13 @@ function isContentSafe(content: string): boolean {
   });
 }
 
-// ── ZAI Singleton (Bug #20 — already fixed) ────────────────────────────
-
-let zaiPromise: Promise<Awaited<ReturnType<typeof ZAI.create>>> | null = null;
-
-async function getZAI() {
-  if (!zaiPromise) {
-    zaiPromise = ZAI.create();
-  }
-  return zaiPromise;
-}
-
-// ── Search triggers (Bug #22: exported for client sync) ────────────────
+// ── Search triggers ────────────────────────────────────────────────────
 
 export const SEARCH_TRIGGERS = [
-  // Indonesian
   'hari ini', 'sekarang', 'terbaru', 'terkini', 'tahun ini', 'bulan ini',
   'tahun 2024', 'tahun 2025', 'berita', 'kabar', 'update', 'cuaca', 'prakiraan',
   'banjir', 'kekeringan', 'el nino', 'la nina', 'krisis air', 'wabah', 'musim',
   'kemarin', 'besok', 'minggu ini',
-  // English
   'latest', 'current', 'recent', 'news', 'today', 'now', 'this year',
   '2024', '2025', 'forecast', 'weather', 'flood', 'drought', 'happening',
 ];
@@ -165,38 +146,24 @@ function shouldSearch(query: string): boolean {
   return SEARCH_TRIGGERS.some((trigger) => lower.includes(trigger));
 }
 
-// Web search with z-ai-web-dev-sdk
+// Web search using Groq built-in web search tool
 async function webSearch(query: string, lang: string): Promise<string> {
   try {
-    const zai = await getZAI();
     const searchQuery = lang === 'id'
       ? `${query} Indonesia terbaru 2025`
       : `${query} latest 2025`;
 
-    const results = await zai.functions.invoke('web_search', {
-      query: searchQuery,
-      num: 5,
-    });
+    const searchResult = await groqWebSearch(searchQuery, { lang: lang as 'id' | 'en' });
 
-    if (!results || !Array.isArray(results) || results.length === 0) {
-      return '';
-    }
+    if (!searchResult) return '';
 
-    const topResults = results.slice(0, 5);
     const label = lang === 'id'
       ? '[HASIL PENCARIAN WEB REAL-TIME — Gunakan info ini sebagai sumber terkini]'
       : '[REAL-TIME WEB SEARCH RESULTS — Use this as current source info]';
 
-    const searchContext = topResults
-      .map((r: any, i: number) => {
-        const source = lang === 'id' ? 'Sumber' : 'Source';
-        return `${i + 1}. ${r.name || 'Untitled'}\n   ${r.snippet || 'No description'}\n   ${source}: ${r.url || 'N/A'}`;
-      })
-      .join('\n\n');
-
     const instruction = lang === 'id'
-      ? `Pertanyaan user: "${query}"\n\n${searchContext}\n\nIngat: Gunakan info di atas untuk menjawab pertanyaan user secara akurat. Sebutkan sumbernya secara natural dalam jawaban kamu.`
-      : `User question: "${query}"\n\n${searchContext}\n\nRemember: Use the info above to answer the user's question accurately. Mention sources naturally in your answer.`;
+      ? `Pertanyaan user: "${query}"\n\n${searchResult}\n\nIngat: Gunakan info di atas untuk menjawab pertanyaan user secara akurat. Sebutkan sumbernya secara natural dalam jawaban kamu.`
+      : `User question: "${query}"\n\n${searchResult}\n\nRemember: Use the info above to answer the user's question accurately. Mention sources naturally in your answer.`;
 
     return `\n\n${label}\n\n${instruction}`;
   } catch (error) {
@@ -205,7 +172,7 @@ async function webSearch(query: string, lang: string): Promise<string> {
   }
 }
 
-// ── Knowledge Base Search (Bug #11: optimized) ─────────────────────────
+// ── Knowledge Base Search ──────────────────────────────────────────────
 
 async function findRelevantKnowledge(question: string, lang: string): Promise<string[]> {
   try {
@@ -217,19 +184,15 @@ async function findRelevantKnowledge(question: string, lang: string): Promise<st
 
     if (keywords.length === 0) return [];
 
-    // Bug #11: Use top keywords for WHERE clause to limit DB scan
     const topKeywords = keywords.slice(0, 3);
     const whereConditions = topKeywords.map(kw => ({
       question: { contains: kw },
     }));
 
     const allKnowledge = await db.chatKnowledge.findMany({
-      where: {
-        lang,
-        OR: whereConditions,
-      },
+      where: { lang, OR: whereConditions },
       orderBy: { upvotes: 'desc' },
-      take: 20, // Reduced from 50
+      take: 20,
     });
 
     if (allKnowledge.length === 0) return [];
@@ -247,15 +210,13 @@ async function findRelevantKnowledge(question: string, lang: string): Promise<st
     const answerLabel = lang === 'id' ? 'Jawaban yang sudah disetujui user' : 'Previously approved answer';
 
     return relevant.map(
-      (r) =>
-        `Previous conversation:\n${userLabel}: "${r.question}"\n${answerLabel}: "${r.answer}"`
+      (r) => `Previous conversation:\n${userLabel}: "${r.question}"\n${answerLabel}: "${r.answer}"`
     );
   } catch {
     return [];
   }
 }
 
-// Save a Q&A pair to knowledge base when user gives positive feedback
 async function learnFromConversation(question: string, answer: string, lang: string) {
   try {
     if (!isContentSafe(question) || !isContentSafe(answer)) {
@@ -331,7 +292,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const zai = await getZAI();
     const systemPrompt = lang === 'en' ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_ID;
 
     let searched = false;
@@ -358,7 +318,6 @@ export async function POST(request: NextRequest) {
       enhancedSystemPrompt += `\n\n${label}\n\n${relevantKnowledge.join('\n\n')}`;
     }
 
-    // Bug #9: Acquire per-session lock
     const releaseLock = await acquireLock(sessionId);
 
     try {
@@ -370,7 +329,7 @@ export async function POST(request: NextRequest) {
         history = stored;
       } else {
         if (conversations.size >= MAX_CONVERSATIONS) {
-          evictLRU(); // Bug #21: LRU eviction
+          evictLRU();
         }
         history = [
           { role: 'system', content: enhancedSystemPrompt },
@@ -388,10 +347,7 @@ export async function POST(request: NextRequest) {
 
       if (history.length > MAX_MESSAGES) {
         const sessionToken = (history as ConversationHistory).token;
-        history = [
-          history[0],
-          ...history.slice(-(MAX_MESSAGES - 1)),
-        ];
+        history = [history[0], ...history.slice(-(MAX_MESSAGES - 1))];
         (history as ConversationHistory).token = sessionToken;
       }
 
@@ -427,12 +383,12 @@ export async function POST(request: NextRequest) {
             let fullContent = '';
 
             try {
-              sdkStream = await zai.chat.completions.create({
-                messages: history as any,
-                stream: true,
-                temperature: 0.4,
-                thinking: { type: 'disabled' },
-              }) as ReadableStream<Uint8Array>;
+              const groqResponse = await groqChat(
+                history as GroqMessage[],
+                { temperature: 0.4, stream: true }
+              );
+
+              sdkStream = groqResponse.body as ReadableStream<Uint8Array>;
 
               if (!sdkStream || typeof sdkStream.getReader !== 'function') {
                 sendEvent('chunk', { content: fallbackResponse });
@@ -472,7 +428,8 @@ export async function POST(request: NextRequest) {
                 }
               }
             } catch (streamError) {
-              console.error('Streaming error:', streamError);
+              const msg = streamError instanceof Error ? streamError.message : String(streamError);
+              console.error('Streaming error:', msg);
               if (!fullContent && !aborted) {
                 fullContent = fallbackResponse;
                 sendEvent('chunk', { content: fallbackResponse });
@@ -483,14 +440,12 @@ export async function POST(request: NextRequest) {
 
             if (aborted) return;
 
-            // Save to DB BEFORE closing stream to ensure durability
             const finalResponse = fullContent || fallbackResponse;
 
             history.push({ role: 'assistant', content: finalResponse });
             (history as ConversationHistory).lastAccess = Date.now();
             conversations.set(sessionId, history as ConversationHistory);
 
-            // Await DB save before closing to prevent data loss
             await db.chatMessage.createMany({
               data: [
                 { sessionId, role: 'user', content: message, lang },
@@ -508,7 +463,7 @@ export async function POST(request: NextRequest) {
           },
         });
 
-        releaseLock(); // Release lock before sending response
+        releaseLock();
         return new Response(stream, {
           headers: {
             'Content-Type': 'text/event-stream',
@@ -519,14 +474,16 @@ export async function POST(request: NextRequest) {
       }
 
       // ── Non-streaming path ────────────────────────────────────────
-      const completion = await zai.chat.completions.create({
-        messages: history as any,
+      const groqResponse = await groqChat(history as GroqMessage[], {
         temperature: 0.4,
-        thinking: { type: 'disabled' },
       });
 
+      const completion = await groqResponse.json() as {
+        choices: Array<{ message: { content: string | null } }>;
+      };
+
       const aiResponse =
-        completion.choices[0]?.message?.content ||
+        completion.choices?.[0]?.message?.content ||
         (lang === 'id'
           ? 'Hmm, aku lagi ngalamin gangguan teknis nih 😅 Coba tanya lagi ya!'
           : 'Hmm, having some technical issues right now 😅 Try asking again!');
@@ -535,7 +492,6 @@ export async function POST(request: NextRequest) {
       (history as ConversationHistory).lastAccess = Date.now();
       conversations.set(sessionId, history as ConversationHistory);
 
-      // Bug #12: Save to DB before returning response
       await db.chatMessage.createMany({
         data: [
           { sessionId, role: 'user', content: message, lang },
@@ -545,7 +501,7 @@ export async function POST(request: NextRequest) {
         console.error('Failed to store messages:', dbError);
       });
 
-      releaseLock(); // Release lock before returning
+      releaseLock();
 
       return NextResponse.json({
         success: true,
@@ -558,9 +514,10 @@ export async function POST(request: NextRequest) {
       throw lockError;
     }
   } catch (error) {
-    console.error('Chat API error:', error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Chat API error:', msg);
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: msg || 'Internal server error' },
       { status: 500 }
     );
   }

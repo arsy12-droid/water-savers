@@ -1,18 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ZAI from 'z-ai-web-dev-sdk';
+import { groqVisionJSON, type GroqMessage } from '@/lib/groq';
 import { validateCsrf, getClientIp } from '@/lib/security';
 import { rateLimit } from '@/lib/rate-limit';
 import sharp from 'sharp';
-
-// ── ZAI Singleton (reuse connection across requests) ─────────────────────
-let zaiPromise: Promise<Awaited<ReturnType<typeof ZAI.create>>> | null = null;
-
-async function getZAI() {
-  if (!zaiPromise) {
-    zaiPromise = ZAI.create();
-  }
-  return zaiPromise;
-}
 
 // Allow up to 30 seconds for VLM processing
 export const maxDuration = 30;
@@ -24,17 +14,14 @@ const MAX_DIMENSION = 4096;
 const ALLOWED_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp']);
 const ALLOWED_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
-// Magic bytes for image validation
 const MAGIC_BYTES: Record<string, number[]> = {
   'image/jpeg': [0xFF, 0xD8, 0xFF],
   'image/png': [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A],
-  'image/webp': [0x52, 0x49, 0x46, 0x46], // RIFF...WEBP
+  'image/webp': [0x52, 0x49, 0x46, 0x46],
 };
 
-// Rate limit: 10 image uploads per minute per IP
 const VISION_RATE_LIMIT = { windowMs: 60 * 1000, maxRequests: 10 };
 
-// Vision system prompt — analyze water/conservation topics with detailed knowledge
 const VISION_SYSTEM_PROMPT = `Kamu adalah AquAI, asisten AI dari Water Savers Team yang fokus pada konservasi air di Indonesia.
 
 Kamu menganalisis gambar yang berkaitan dengan:
@@ -85,10 +72,7 @@ function validateMagicBytes(buffer: Buffer): string | null {
 
 async function processImage(buffer: Buffer): Promise<{ data: Buffer; mimeType: string }> {
   try {
-    // Use sharp to validate, strip EXIF metadata, and resize if needed
     let image = sharp(buffer);
-
-    // Get metadata to validate dimensions
     const metadata = await image.metadata();
 
     if (metadata.width && metadata.width > MAX_DIMENSION) {
@@ -98,15 +82,13 @@ async function processImage(buffer: Buffer): Promise<{ data: Buffer; mimeType: s
       image = image.resize(null, MAX_DIMENSION, { withoutEnlargement: true });
     }
 
-    // Convert to JPEG for consistency and smaller size (strip all EXIF)
     const processed = await image
       .jpeg({ quality: 85, mozjpeg: true })
-      .rotate() // Auto-rotate based on EXIF orientation, then strip
+      .rotate()
       .toBuffer();
 
     return { data: processed, mimeType: 'image/jpeg' };
   } catch {
-    // If sharp fails, return original buffer
     const detectedMime = validateMagicBytes(buffer);
     return { data: buffer, mimeType: detectedMime || 'image/jpeg' };
   }
@@ -115,11 +97,9 @@ async function processImage(buffer: Buffer): Promise<{ data: Buffer; mimeType: s
 // ── Main Handler ──────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
-  // Layer 1: CSRF check
   const csrfError = validateCsrf(request);
   if (csrfError) return csrfError;
 
-  // Layer 2: Rate limiting per IP (10 uploads per minute)
   const ip = getClientIp(request);
   const rateResult = rateLimit(`vision:${ip}`, VISION_RATE_LIMIT);
   if (!rateResult.success) {
@@ -132,7 +112,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 3: Parse FormData
   let formData: FormData;
   try {
     formData = await request.formData();
@@ -146,7 +125,6 @@ export async function POST(request: NextRequest) {
   const file = formData.get('image') as File | null;
   const prompt = (formData.get('prompt') as string | null) || '';
 
-  // Layer 4: Validate file exists
   if (!file) {
     return NextResponse.json(
       { success: false, error: 'File gambar diperlukan.' },
@@ -154,7 +132,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 5: Validate file extension
   if (!validateExtension(file.name)) {
     return NextResponse.json(
       { success: false, error: 'Format file tidak didukung. Gunakan JPG, PNG, atau WebP.' },
@@ -162,7 +139,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 6: Validate file size
   if (file.size > MAX_FILE_SIZE) {
     return NextResponse.json(
       { success: false, error: `File terlalu besar. Maksimal ${MAX_FILE_SIZE / (1024 * 1024)}MB.` },
@@ -170,7 +146,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 7: Validate minimum file size (at least 100 bytes)
   if (file.size < 100) {
     return NextResponse.json(
       { success: false, error: 'File terlalu kecil atau tidak valid.' },
@@ -178,7 +153,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 8: Validate magic bytes (actual file content, not just extension)
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(new Uint8Array(arrayBuffer));
   const detectedMime = validateMagicBytes(buffer);
@@ -190,7 +164,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 9: Validate MIME type matches detected type
   if (!ALLOWED_MIME_TYPES.has(detectedMime)) {
     return NextResponse.json(
       { success: false, error: 'Tipe file tidak didukung.' },
@@ -198,13 +171,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Layer 10: Process image (strip EXIF, resize if needed) — in-memory only
   const { data: processedBuffer, mimeType: finalMime } = await processImage(buffer);
 
-  // Layer 11: Call VLM with base64 image
   try {
-    const zai = await getZAI();
-
     const visionPrompt = prompt
       ? `${prompt}\n\nAnalisis gambar ini dan berikan jawaban yang relevan tentang air dan konservasi.`
       : 'Analisis gambar ini dan berikan informasi yang relevan tentang air dan konservasi. Jika gambar tidak terkait air, jelaskan dengan sopan bahwa kamu hanya bisa menganalisis gambar terkait air.';
@@ -212,21 +181,18 @@ export async function POST(request: NextRequest) {
     const base64Image = processedBuffer.toString('base64');
     const imageUrl = `data:${finalMime};base64,${base64Image}`;
 
-    const response = await zai.chat.completions.createVision({
-      model: 'glm-4.6v',
-      messages: [
-        { role: 'system', content: VISION_SYSTEM_PROMPT },
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: visionPrompt },
-            { type: 'image_url', image_url: { url: imageUrl } },
-          ],
-        },
-      ],
-      thinking: { type: 'disabled' },
-    });
+    const messages: GroqMessage[] = [
+      { role: 'system', content: VISION_SYSTEM_PROMPT },
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text: visionPrompt },
+          { type: 'image_url', image_url: { url: imageUrl } },
+        ],
+      },
+    ];
 
+    const response = await groqVisionJSON(messages);
     const aiContent = response.choices?.[0]?.message?.content || '';
 
     if (!aiContent.trim()) {
@@ -241,7 +207,8 @@ export async function POST(request: NextRequest) {
       content: aiContent.trim(),
     });
   } catch (error) {
-    console.error('VLM Error:', error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Vision API error:', msg);
     return NextResponse.json(
       { success: false, error: 'Gagal menganalisis gambar. Silakan coba lagi.' },
       { status: 500 }
