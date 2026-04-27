@@ -24,3 +24,34 @@
 
 ### Modification
 - `next.config.ts`: Changed `allowedDevOrigins` from preview URL to empty array `[]`
+
+## 2025-04-27 — UI Fix: Sync Workspace CSS & Assets
+
+**Task**: Fix broken display by syncing workspace files (globals.css, GeoJSON, avatar) and adding new AquAI profile photo.
+
+### Changes Made
+
+1. **`src/app/globals.css`** — Synced from workspace (2439 lines). Added ~1000 lines of polished CSS:
+   - Text shimmer & gradient mesh animations
+   - Card glow effects with animated borders
+   - Water footprint calculator styles (wave, bubbles, orbit, ripple, slider)
+   - Leaflet map overrides (fullscreen, zoom controls, province tooltips, dark mode)
+   - CTA bubble effects & footer gradient line
+   - `prefers-reduced-motion` support
+   - Removed `content-visibility` (caused scroll jumps)
+
+2. **`public/indonesia-38-provinces.geojson`** — Copied from workspace. 38 province boundary polygons for the water crisis map component.
+
+3. **`public/aquai-avatar.webp`** — Copied from workspace. Optimized WebP version of avatar (13.7KB vs 1MB PNG).
+
+4. **`public/aquai-profile.jpeg`** — NEW. WhatsApp profile photo for AquAI (1024x1024, 131KB).
+
+5. **`src/components/water-savers/chat-assistant.tsx`** — Updated all 3 avatar references from `aquai-avatar.webp` to `aquai-profile.jpeg`.
+
+6. **`next.config.ts`** — Updated:
+   - `allowedDevOrigins`: Added preview domain `preview-chat-fbc7b085-6e01-464d-a44a-275bffc3ff0f.space.z.ai`
+   - Cache-Control: Added `aquai-profile.*` to static asset caching
+
+### Verification
+- Dev server starts and page loads with 200 status
+- All CSS animations and styles compiled successfully

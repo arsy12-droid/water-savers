@@ -605,7 +605,7 @@ export default function ChatAssistant() {
           <div className="chat-panel-section flex items-center justify-between px-4 py-3 bg-gradient-to-r from-cyan-500 to-ocean-600 text-white shrink-0 rounded-t-2xl" style={{ '--section-delay': '0.18s' } as React.CSSProperties}>
             <div className="flex items-center gap-0.5">
               <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white/30">
-                <img src="/aquai-avatar.webp" alt="AquAI" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                <img src="/aquai-profile.jpeg" alt="AquAI" className="w-full h-full object-cover" loading="lazy" decoding="async" />
               </div>
               <div className="pl-2">
                 <h3 className="text-sm font-bold leading-tight">AquAI 💧</h3>
@@ -656,7 +656,7 @@ export default function ChatAssistant() {
                     {msg.role === 'user' ? (
                       <User className="h-6 w-6 text-ocean-600 dark:text-ocean-300" />
                     ) : (
-                      <img src="/aquai-avatar.webp" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
+                      <img src="/aquai-profile.jpeg" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
                     )}
                   </div>
                   <div className={`max-w-[80%] flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
@@ -754,7 +754,7 @@ export default function ChatAssistant() {
               {(isLoading || isAnalyzing) && messages.length > 0 && messages[messages.length - 1].content === '' && (
                 <div className="flex gap-2.5">
                   <div className="w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden">
-                    <img src="/aquai-avatar.webp" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
+                    <img src="/aquai-profile.jpeg" alt="AquAI" className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
                   </div>
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-md px-4 py-3">
                     {isSearching ? (

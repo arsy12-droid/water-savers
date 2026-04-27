@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+/* Leaflet CSS loaded in water-crisis-map.tsx to avoid global overhead */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -192,13 +193,12 @@
 .dr1 { animation: dropFall 2.2s ease-in 0.75s infinite; will-change: transform, opacity; }
 .dr2 { animation: dropFall 2.2s ease-in 1.5s infinite; will-change: transform, opacity; }
 
-/* BOUNCE */
+/* BOUNCE — arrow down bounce */
 @keyframes scrollBounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(10px); opacity: 1; }
 }
-.sb { animation: scrollBounce 2.5s infinite; }
+.sb { animation: scrollBounce 2s ease-in-out infinite; }
 
 /* SHIMMER */
 @keyframes shimmer {
@@ -1177,10 +1177,12 @@
 
 
 /* CONTENT VISIBILITY — defer rendering of below-fold sections */
-#penyebab { content-visibility: auto; contain-intrinsic-size: auto 800px; }
-#data { content-visibility: auto; contain-intrinsic-size: auto 1200px; }
-#langkah { content-visibility: auto; contain-intrinsic-size: auto 1400px; }
-#dampak { content-visibility: auto; contain-intrinsic-size: auto 1000px; }
+/* content-visibility removed — caused scroll jumps between hero and sections */
+
+/* Scroll offset for fixed navbar — all sections */
+[id="penyebab"], [id="data"], [id="peta"], [id="langkah"], [id="kalkulator"], [id="dampak"] {
+  scroll-margin-top: 5rem;
+}
 
 /* BACK TO TOP */
 #btt { transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s; }
@@ -1190,6 +1192,1007 @@
 /* TOAST */
 .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 60; background: #0c1e3a; color: white; font-size: 0.875rem; font-weight: 500; padding: 0.75rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: toastSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; white-space: nowrap; }
 .toast.fade-out { opacity: 0; transform: translateX(-50%) translateY(10px); transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* ===== NAV DROPDOWN BACKDROP ===== */
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== FRESH UI ENHANCEMENT ANIMATIONS ===== */
+
+/* Gradient mesh shift for section backgrounds */
+@keyframes gradientMesh {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Water flow line — for decorative flowing lines */
+@keyframes waterFlow {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Gentle float with horizontal sway */
+@keyframes floatSway {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-10px) translateX(5px); }
+  50% { transform: translateY(-4px) translateX(-3px); }
+  75% { transform: translateY(-12px) translateX(4px); }
+}
+
+/* Gradient text shimmer sweep */
+@keyframes textShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(90deg, #2563eb 0%, #06b6d4 25%, #22d3ee 50%, #06b6d4 75%, #2563eb 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 4s linear infinite;
+}
+
+/* Accent gradient for sections */
+@keyframes accentFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Card entrance from bottom with slight rotation */
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(30px) rotateX(3deg); }
+  to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+/* Icon bounce pulse */
+@keyframes iconBounce {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-3px); }
+}
+
+/* Soft glow ring for badges */
+@keyframes softGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(37,99,235,0.15); }
+  50% { box-shadow: 0 0 20px rgba(37,99,235,0.35); }
+}
+
+/* Water ripple ring expanding */
+@keyframes waterRing {
+  0% { transform: scale(0.8); opacity: 0.6; border-width: 3px; }
+  100% { transform: scale(1.6); opacity: 0; border-width: 1px; }
+}
+
+/* Marquee / ticker scroll */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Section divider wave gradient */
+@keyframes waveDivider {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Spin slow with pause */
+@keyframes spinPause {
+  0% { transform: rotate(0deg); }
+  90% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Number count-up glow */
+@keyframes numGlow {
+  0%, 100% { text-shadow: 0 0 0 transparent; filter: brightness(1); }
+  50% { text-shadow: 0 0 15px rgba(37,99,235,0.2); filter: brightness(1.05); }
+}
+
+/* Number glow pulse — for stat card values */
+.num-glow {
+  animation: numGlow 3s ease-in-out infinite;
+}
+
+/* Stat card icon hover bounce */
+.stat-icon-bounce {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stat-card-enhanced:hover .stat-icon-bounce {
+  animation: iconBounce 0.6s ease-in-out;
+}
+
+/* Bar chart row hover highlight */
+.bar-row-hover {
+  transition: background 0.3s ease, transform 0.3s ease;
+  border-radius: 8px;
+  padding: 6px 8px;
+  margin: -6px -8px;
+}
+.bar-row-hover:hover {
+  background: rgba(37,99,235,0.04);
+  transform: translateX(4px);
+}
+.dark .bar-row-hover:hover {
+  background: rgba(59,130,246,0.08);
+}
+
+/* Data section glass chart card */
+.data-glass-card {
+  position: relative;
+  overflow: hidden;
+}
+.data-glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 20% 0%, rgba(37,99,235,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.dark .data-glass-card::before {
+  background: radial-gradient(ellipse at 20% 0%, rgba(59,130,246,0.06) 0%, transparent 50%);
+}
+
+/* Floating decorative orb for data section */
+.data-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(40px);
+  opacity: 0.12;
+}
+
+/* Scroll reveal with slight perspective */
+.anim-perspective {
+  opacity: 0;
+  transform: translateY(50px) perspective(800px) rotateX(4deg);
+  transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.anim-perspective.visible {
+  opacity: 1;
+  transform: translateY(0) perspective(800px) rotateX(0);
+  will-change: auto;
+}
+
+/* Enhanced card hover with inner glow */
+.card-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(37,99,235,0.04) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.card-glow:hover::after {
+  opacity: 1;
+}
+.card-glow:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(37,99,235,0.08);
+}
+
+/* Enhanced cause card */
+.cause-card-enhanced {
+  border-left: 4px solid transparent;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+.cause-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 0% 50%, rgba(37,99,235,0.04) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.cause-card-enhanced:hover {
+  border-left-color: #2563eb;
+  transform: translateY(-4px) translateX(4px);
+  box-shadow: 0 15px 35px rgba(37,99,235,0.08);
+}
+.cause-card-enhanced:hover::before {
+  opacity: 1;
+}
+.dark .cause-card-enhanced:hover {
+  background: rgba(37,99,235,0.06);
+}
+
+/* Enhanced step card */
+.step-card-enhanced {
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+.step-card-enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(37,99,235,0.03) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+.step-card-enhanced:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(37,99,235,0.06);
+}
+.step-card-enhanced:hover::after {
+  opacity: 1;
+}
+
+/* Steps section dot grid background */
+.steps-dot-bg {
+  background-image: radial-gradient(circle, rgba(37,99,235,0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+.dark .steps-dot-bg {
+  background-image: radial-gradient(circle, rgba(96,165,250,0.025) 1px, transparent 1px);
+}
+
+/* Connecting dots overlay — sits behind the card grid */
+.steps-connect-dots {
+  background-image:
+    radial-gradient(circle, rgba(37,99,235,0.08) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border-radius: 1rem;
+}
+.dark .steps-connect-dots {
+  background-image:
+    radial-gradient(circle, rgba(96,165,250,0.05) 1.5px, transparent 1.5px);
+}
+
+/* Step card enhanced — hover children (mirrors step-card hover for step-num and icon) */
+.step-card-enhanced:hover .step-num { opacity: 0.12; }
+.step-card-enhanced:hover .step-icon-inner { transform: scale(1.1) rotate(-5deg); }
+
+/* Floating decorative blob keyframes */
+@keyframes blobFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -25px) scale(1.06); }
+  66% { transform: translate(-20px, 15px) scale(0.94); }
+}
+@keyframes blobFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-25px, 20px) scale(0.94); }
+  66% { transform: translate(20px, -30px) scale(1.08); }
+}
+.steps-blob-1 { animation: blobFloat1 16s ease-in-out infinite; }
+.steps-blob-2 { animation: blobFloat2 20s ease-in-out infinite; }
+.steps-blob-3 { animation: blobFloat1 24s ease-in-out 5s infinite; }
+
+/* Steps calculator card enhanced glassmorphism */
+.steps-calc-glass {
+  position: relative;
+  overflow: hidden;
+}
+.steps-calc-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.12) 0%,
+    transparent 40%,
+    rgba(255,255,255,0.06) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.dark .steps-calc-glass::before {
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.06) 0%,
+    transparent 40%,
+    rgba(255,255,255,0.02) 100%);
+}
+
+/* Enhanced impact card */
+.impact-card-enhanced {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+.impact-card-enhanced:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* Enhanced stat card */
+.stat-card-enhanced {
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(37,99,235,0.05) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.stat-card-enhanced:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 25px 50px rgba(37,99,235,0.1), 0 0 0 1px rgba(37,99,235,0.08);
+}
+.stat-card-enhanced:hover::before {
+  opacity: 1;
+}
+
+/* Enhanced bar fill with glow */
+.bar-fill-enhanced {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+.bar-fill-enhanced.visible {
+  transform: scaleX(1);
+}
+.bar-fill-enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+  border-radius: inherit;
+}
+
+/* Hero mesh gradient background */
+.hero-mesh {
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(6,182,212,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(37,99,235,0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #0c1e3a 0%, #1e40af 40%, #2563eb 70%, #3b82f6 100%);
+}
+
+/* Animated border gradient for CTA */
+@keyframes borderRotate {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.cta-border-animated {
+  --angle: 0deg;
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-image: 
+    linear-gradient(var(--cta-bg, #1e3a5f), var(--cta-bg, #1e3a5f)),
+    conic-gradient(from var(--angle), #2563eb, #06b6d4, #22d3ee, #06b6d4, #2563eb);
+  animation: borderRotate 4s linear infinite;
+}
+
+/* Floating label animation */
+@keyframes labelFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Footer wave gradient line */
+.footer-gradient-line {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #2563eb, #06b6d4, #2563eb, transparent);
+  background-size: 200% 100%;
+  animation: waveDivider 6s linear infinite;
+}
+
+/* Back to top enhanced */
+.btt-enhanced {
+  position: fixed;
+  overflow: visible;
+}
+.btt-enhanced::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(59,130,246,0.3);
+  animation: waterRing 2.5s ease-out infinite;
+  pointer-events: none;
+}
+.btt-enhanced::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(59,130,246,0.3);
+  animation: waterRing 2.5s ease-out 1.25s infinite;
+  pointer-events: none;
+}
+
+/* Social icon hover lift */
+.social-icon-hover {
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.social-icon-hover:hover {
+  transform: translateY(-3px) scale(1.1);
+  background: rgba(59,130,246,0.15);
+}
+
+/* Projection year card */
+.proj-card {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+.proj-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.proj-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.05);
+}
+.proj-card:hover::before {
+  opacity: 0.6;
+}
+
+/* Shimmer sweep on card mount */
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-sweep::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmerSweep 1.5s ease-out 0.5s forwards;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes shimmerSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Section badge with animated dot */
+.badge-dot::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 6px;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+/* CTA animated ring effect around icon container */
+.cta-ring {
+  position: relative;
+}
+.cta-ring::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  animation: ctaRingPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+.cta-ring::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: ctaRingPulse 3s ease-in-out 1.5s infinite;
+  pointer-events: none;
+}
+@keyframes ctaRingPulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* CTA floating water bubbles */
+.cta-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+@keyframes ctaBubbleFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-200px) scale(0.3); opacity: 0; }
+}
+
+/* CTA wave SVG at edges */
+.cta-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 200%;
+  pointer-events: none;
+}
+.cta-wave-top {
+  top: -1px;
+  animation: wave 10s linear infinite;
+}
+.cta-wave-bottom {
+  bottom: -1px;
+  transform: rotate(180deg);
+  animation: wave 12s linear infinite reverse;
+}
+
+/* CTA button animated gradient border */
+.cta-btn-glow {
+  position: relative;
+  overflow: visible;
+}
+.cta-btn-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  background: conic-gradient(from var(--angle, 0deg), #2563eb, #06b6d4, #22d3ee, #3b82f6, #2563eb);
+  z-index: -1;
+  animation: borderRotate 3s linear infinite;
+  filter: blur(6px);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+.cta-btn-glow:hover::before {
+  opacity: 1;
+  filter: blur(10px);
+}
+
+/* Footer link hover — slide right */
+.footer-link-hover {
+  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  padding-left: 0;
+}
+.footer-link-hover:hover {
+  transform: translateX(6px);
+  padding-left: 8px;
+  color: rgba(34, 211, 238, 0.8) !important;
+}
+
+/* Footer data source hover */
+.footer-src-hover {
+  transition: all 0.3s ease;
+  padding-left: 0;
+}
+.footer-src-hover:hover {
+  color: rgba(255,255,255,0.6) !important;
+  padding-left: 4px;
+}
+
+/* Projection timeline connecting line */
+.proj-timeline {
+  position: relative;
+}
+.proj-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent 0%, rgba(59,130,246,0.3) 15%, rgba(6,182,212,0.3) 85%, transparent 100%);
+  transform: translateX(-50%);
+}
+@media (max-width: 767px) {
+  .proj-timeline::before {
+    display: none;
+  }
+}
+
+/* Projection timeline dot */
+.proj-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  margin: 0 auto 12px;
+  box-shadow: 0 0 12px currentColor;
+  position: relative;
+  z-index: 2;
+}
+
+/* Animated icon container for impact column headers */
+.impact-icon-anim {
+  animation: iconBounce 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* prefers-reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer,
+  .shimmer-sweep::before,
+  .btt-enhanced::before,
+  .btt-enhanced::after,
+  .footer-gradient-line,
+  .cta-border-animated,
+  .cta-ring::before,
+  .cta-ring::after,
+  .cta-bubble,
+  .cta-wave,
+  .cta-btn-glow::before,
+  .impact-icon-anim {
+    animation: none !important;
+  }
+  .card-glow,
+  .cause-card-enhanced,
+  .step-card-enhanced,
+  .impact-card-enhanced,
+  .stat-card-enhanced,
+  .proj-card {
+    transition-duration: 0.01s !important;
+  }
+  .steps-blob-1, .steps-blob-2, .steps-blob-3 {
+    animation: none !important;
+  }
+}
+
+/* ===== WATER FOOTPRINT CALCULATOR ===== */
+
+/* ---- New keyframe animations ---- */
+
+/* Water wave in results */
+@keyframes waterWave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Bubble float */
+@keyframes bubbleFloat {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: var(--bubble-opacity, 0.3); }
+  25% { opacity: calc(var(--bubble-opacity, 0.3) + 0.15); }
+  50% { transform: translateY(-80px) translateX(var(--bubble-drift, 10px)); opacity: var(--bubble-opacity, 0.3); }
+  75% { opacity: calc(var(--bubble-opacity, 0.3) + 0.1); }
+}
+
+/* Orbit droplets around result number */
+@keyframes orbitSpin {
+  0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+
+/* Shimmer sweep for buttons */
+@keyframes shimmerSweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* Ripple effect */
+@keyframes rippleExpand {
+  0% { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Breathing glow for active step */
+@keyframes breatheGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+}
+
+/* Liquid fill for progress */
+@keyframes liquidFill {
+  0% { transform: scaleX(0); transform-origin: left; }
+  50% { transform: scaleX(1.03); transform-origin: left; }
+  100% { transform: scaleX(1); transform-origin: left; }
+}
+
+/* Card entrance stagger */
+@keyframes cardSlideUp {
+  0% { opacity: 0; transform: translateY(24px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Checkmark pop */
+@keyframes checkPop {
+  0% { transform: scale(0) rotate(-45deg); }
+  50% { transform: scale(1.3) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Gradient border rotation for share button */
+@keyframes rotateBorder {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+/* Floating animation for slider icons */
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Pulse for high usage */
+@keyframes highUsagePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ---- Utility classes ---- */
+
+/* Water wave container and SVG path */
+.calc-wave-container {
+  overflow: hidden;
+  width: 100%;
+}
+.calc-wave {
+  display: block;
+  animation: waterWave 4s linear infinite;
+}
+
+/* Floating bubbles */
+.calc-bubble {
+  animation: bubbleFloat var(--bubble-duration, 10s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Orbiting dots around result number */
+.calc-orbit-dot {
+  animation: orbitSpin var(--orbit-duration, 6s) linear infinite;
+  will-change: transform;
+}
+@media (min-width: 768px) {
+  .calc-orbit-dot {
+    animation-name: orbitSpin;
+  }
+}
+
+/* Shimmer sweep button overlay */
+.calc-shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple expanding circle on click */
+.calc-ripple {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  animation: rippleExpand 0.6s ease-out forwards;
+  z-index: 20;
+}
+.dark .calc-ripple {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Breathing glow for active step */
+.calc-breathe {
+  animation: breatheGlow 2s ease-in-out infinite;
+}
+
+/* Liquid fill progress bar */
+.calc-liquid-fill {
+  animation: liquidFill 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: left;
+}
+
+/* Staggered card entrance */
+.calc-card-enter {
+  opacity: 0;
+  animation: cardSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Checkmark bounce */
+.calc-check-pop {
+  display: inline-flex;
+  animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Gradient border for share button */
+.calc-gradient-border {
+  animation: rotateBorder 3s linear infinite;
+}
+
+/* Floating icon animation */
+.calc-icon-float {
+  animation: iconFloat 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Pulse for high usage values */
+.calc-high-usage {
+  animation: highUsagePulse 1.5s ease-in-out infinite;
+}
+
+/* ---- Slider styles (preserved + enhanced) ---- */
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  border: 3px solid white;
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4), 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+.calc-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+.calc-slider::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.6), 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+.calc-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  border: 3px solid white;
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4), 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+.calc-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+.calc-slider::-moz-range-thumb:active {
+  transform: scale(1.1);
+}
+.calc-slider:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}
+
+/* Slider card hover glow + inner shadow */
+.calc-card {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.calc-card:active {
+  transform: scale(0.97) !important;
+}
+
+/* Main calculator card subtle inner glow */
+.calc-main-card {
+  position: relative;
+}
+.calc-main-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.03) 0%, transparent 100%);
+  border-radius: 1.5rem 1.5rem 0 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.dark .calc-main-card::before {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+}
+
+/* Result card orbit animation */
+@keyframes calcOrbit {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(10px, -10px) scale(1.05); }
+  66% { transform: translate(-5px, 5px) scale(0.95); }
+}
+.calc-orbit {
+  animation: calcOrbit 8s ease-in-out infinite;
+}
+.calc-orbit-reverse {
+  animation: calcOrbit 10s ease-in-out infinite reverse;
+}
+
+/* Pop-in animation for result items */
+@keyframes calcPopIn {
+  0% { opacity: 0; transform: translateY(16px) scale(0.92); }
+  60% { opacity: 1; transform: translateY(-2px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.calc-pop-in {
+  opacity: 0;
+  animation: calcPopIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Water drop rise animation */
+@keyframes calcDropRise {
+  0% { transform: translateY(0) scale(1); opacity: 0.4; }
+  30% { opacity: 0.6; }
+  100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+}
+.calc-drop div {
+  animation: calcDropRise 3s ease-in infinite;
+}
+
+/* Result card subtle float */
+@keyframes calcFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.result-card {
+  animation: calcFloat 4s ease-in-out infinite;
+}
+
+/* Hover states — very smooth 500ms */
+.calc-card:hover,
+.calc-pop-in,
+.result-card {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Active/pressed states — scale(0.97) */
+.calc-card:active,
+.calc-shimmer-btn:active,
+button:active {
+  transform: scale(0.97);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .calc-orbit, .calc-orbit-reverse, .result-card, .calc-drop div,
+  .calc-pop-in, .calc-card-enter, .calc-check-pop,
+  .calc-breathe, .calc-liquid-fill, .calc-icon-float,
+  .calc-high-usage, .calc-bubble, .calc-orbit-dot,
+  .calc-wave, .calc-shimmer-btn span,
+  .calc-gradient-border {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .calc-ripple {
+    display: none !important;
+  }
+}
 
 /* Dark mode ocean color overrides */
 .dark {
@@ -1260,5 +2263,177 @@
     opacity: 1;
     transform: none;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== LEAFLET MAP OVERRIDES ===== */
+/* Fix z-index conflicts with fixed navbar and other overlays */
+.leaflet-container {
+  font-family: system-ui, -apple-system, sans-serif !important;
+  z-index: 1;
+}
+
+/* Fullscreen map — fill entire viewport, no rounded corners */
+.map-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
+/* Fullscreen map — backdrop background when tiles haven't loaded */
+:fullscreen {
+  background: #e8e4df;
+}
+.dark :fullscreen {
+  background: #1a1a2e;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2 !important;
+}
+
+.leaflet-control {
+  z-index: 3 !important;
+}
+
+/* Zoom controls styling */
+.leaflet-control-zoom a {
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.leaflet-control-zoom a:hover {
+  transform: scale(1.08) !important;
+}
+
+.dark .leaflet-control-zoom a {
+  background-color: #374151 !important;
+  color: #f3f4f6 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .leaflet-control-zoom a:hover {
+  background-color: #4b5563 !important;
+}
+
+/* Attribution styling */
+.dark .leaflet-control-attribution {
+  background: rgba(17, 24, 39, 0.8) !important;
+  color: #9ca3af !important;
+}
+
+.dark .leaflet-control-attribution a {
+  color: #60a5fa !important;
+}
+
+/* ===== LEAFLET PROVINCE TOOLTIP ===== */
+.province-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 8px 4px 8px !important;
+}
+.province-tooltip .leaflet-tooltip-content {
+  background: transparent !important;
+  border: none !important;
+  padding: 4px 6px !important;
+  box-shadow: none !important;
+}
+.province-tooltip .tt-label {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  padding: 5px 12px !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+.province-tooltip .tt-name {
+  color: #111827 !important;
+}
+.province-tooltip .tt-sep {
+  color: #9ca3af !important;
+}
+.province-tooltip .leaflet-tooltip-left:before,
+.province-tooltip .leaflet-tooltip-right:before {
+  border-top-color: transparent !important;
+}
+.province-tooltip .leaflet-tooltip-top:before {
+  border-bottom-color: transparent !important;
+}
+.province-tooltip .leaflet-tooltip-bottom:before {
+  border-top-color: transparent !important;
+}
+.province-tooltip .leaflet-tooltip-bottom::after {
+  border-top-color: transparent !important;
+}
+.dark .province-tooltip .tt-label {
+  background: #111827 !important;
+  color: #f3f4f6 !important;
+  border-color: rgba(255,255,255,0.15) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+.dark .province-tooltip .tt-name {
+  color: #f9fafb !important;
+}
+.dark .province-tooltip .tt-sep {
+  color: #6b7280 !important;
+}
+.dark .province-tooltip .leaflet-tooltip-left:before,
+.dark .province-tooltip .leaflet-tooltip-right:before {
+  border-top-color: transparent !important;
+}
+.dark .province-tooltip .leaflet-tooltip-top:before {
+  border-bottom-color: transparent !important;
+}
+.dark .province-tooltip .leaflet-tooltip-bottom:before {
+  border-top-color: transparent !important;
+}
+.dark .province-tooltip .leaflet-tooltip-bottom::after {
+  border-top-color: transparent !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY: Reduced Motion — disables infinite animations
+   for users who prefer it, saving GPU & battery on mobile
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .fl, .fld, .fl2, .fl-slow,
+  .rp, .rpd, .rp2,
+  .wv, .wvs,
+  .dr, .dr1, .dr2,
+  .sb,
+  .shimmer,
+  .pulse-glow, .pulse-glow-green, .pulse-ring,
+  .rotate-slow,
+  .particle,
+  .counter-glow,
+  .gradient-border-animate,
+  .cta-bubble,
+  .calc-wave,
+  .map-glow {
+    animation: none !important;
+    will-change: auto !important;
+  }
+  /* Keep scroll-triggered animations but make them instant */
+  .anim, .anim-left, .anim-right, .anim-scale, .anim-blur {
+    transition-duration: 0.01ms !important;
+  }
+  .af, .af-down {
+    animation-duration: 0.01ms !important;
   }
 }

@@ -65,7 +65,7 @@ const nextConfig: NextConfig = {
       },
       // Cache-Control for static assets (GeoJSON, images, fonts)
       {
-        source: "/(indonesia-38-provinces.geojson|aquai-avatar.*)",
+        source: "/(indonesia-38-provinces.geojson|aquai-avatar.*|aquai-profile.*)",
         headers: [
           {
             key: "Cache-Control",
@@ -111,7 +111,7 @@ const nextConfig: NextConfig = {
       "@radix-ui/react-accordion",
     ],
   },
-  allowedDevOrigins: [],
+  allowedDevOrigins: ['preview-chat-fbc7b085-6e01-464d-a44a-275bffc3ff0f.space.z.ai'],
 };
 
 export default nextConfig;
