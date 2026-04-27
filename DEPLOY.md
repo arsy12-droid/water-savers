@@ -29,10 +29,11 @@
 2. Daftar dengan **GitHub** (paling mudah)
 3. Setelah masuk, install Turso CLI:
    ```bash
-   # Di komputer kamu (bukan di project)
-   # Windows: buka PowerShell
-   # Mac/Linux: buka Terminal
+   # Mac / Linux:
    curl -sSfL https://get.tur.so/install.sh | bash
+
+   # Windows (PowerShell):
+   irm https://get.tur.so/install.ps1 | iex
    ```
 4. Login ke Turso:
    ```bash
@@ -123,9 +124,13 @@ turso db tokens create water-savers
 ### 3D. Push schema database
 
 ```bash
-# Set environment variable dulu
-export TURSO_DATABASE_URL="libsql://water-savers-USERNAME.turso.io"
-export TURSO_AUTH_TOKEN="token_kamu_tadi"
+# Set environment variable dulu (ganti dengan milikmu)
+set TURSO_DATABASE_URL=libsql://water-savers-USERNAME.turso.io    # Windows PowerShell
+set TURSO_AUTH_TOKEN=token_kamu_tadi                                # Windows PowerShell
+
+# ATAU untuk Mac/Linux:
+# export TURSO_DATABASE_URL="libsql://water-savers-USERNAME.turso.io"
+# export TURSO_AUTH_TOKEN="token_kamu_tadi"
 
 # Push schema ke Turso
 npx prisma db push
